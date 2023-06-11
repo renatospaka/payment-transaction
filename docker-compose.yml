@@ -16,18 +16,18 @@ services:
       - cred_system_network
 
   db:
-    image: postgres:15
+    build: .docker/postgres
     container_name: transact_db
     restart: always
     tty: true
     ports:
       - 3151:5432
     volumes:
-      - ~/postgres/pgdata-15:/var/lib/postgresql/data
+      - .docker/postgres/dbdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=transactions
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=thisislocal#noneedtoworry
+      - POSTGRES_PASSWORD=thisislocal-noneedtoworry
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
     networks:
