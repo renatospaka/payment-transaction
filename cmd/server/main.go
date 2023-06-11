@@ -6,10 +6,10 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
-	"github.com/renatospaka/transact/configs"
+	"github.com/renatospaka/transaction/configs"
 )
 
-func main(){
+func main() {
 	log.Println("iniciando a aplicação")
 	configs, err := configs.LoadConfig(".")
 	if err != nil {
@@ -22,7 +22,7 @@ func main(){
 	// log.Printf("DBPort: %s\n", configs.DBPort)
 	// log.Printf("WEBServerPort: %s\n", configs.WEBServerPort)
 	// log.Printf("GRPCServerPort: %s\n", configs.GRPCServerPort)
-	
+
 	//open connection to the database
 	log.Println("iniciando conexão com o banco de dados")
 	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
@@ -31,7 +31,7 @@ func main(){
 		log.Panic(err)
 	}
 	defer db.Close()
-	
+
 	log.Println("banco de dados conectado")
 	ctx := context.Background()
 	pb, err := db.Conn(ctx)
