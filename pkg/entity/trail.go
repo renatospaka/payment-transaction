@@ -50,15 +50,15 @@ func (t *TrailDate) SetDeletionToDate(date time.Time) {
 	t.deletedAt = date
 }
 
-func (t *TrailDate) Created() time.Time {
+func (t *TrailDate) CreatedAt() time.Time {
 	return t.createdAt
 }
 
-func (t *TrailDate) Deleted() time.Time {
+func (t *TrailDate) DeletedAt() time.Time {
 	return t.deletedAt
 }
 
-func (t *TrailDate) Updated() time.Time {
+func (t *TrailDate) UpdatedAt() time.Time {
 	return t.updatedAt
 }
 

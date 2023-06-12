@@ -129,5 +129,5 @@ func TestSetStatusToDeleted(t *testing.T) {
 	assert.Equal(t, entity.TR_DELETED, tr.GetStatus())
 	assert.True(t, tr.DeniedAt().IsZero())
 	assert.True(t, tr.ApprovedAt().IsZero())
-	assert.False(t, tr.TrailDate.Deleted().IsZero())
+	assert.False(t, tr.TrailDate.DeletedAt().IsZero())
 }
