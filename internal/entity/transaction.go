@@ -66,7 +66,7 @@ func (t *Transaction) SetStatusToApproved() {
 func (t *Transaction) SetStatusToApprovedOnDate(date time.Time) {
 	t.approvedAt = date
 	t.deniedAt = time.Time{}
-	t.TrailDate.SetAlterationToDate(date)
+	t.TrailDate.SetAlterationToToday()
 	t.status = TR_APPROVED
 }
 
@@ -82,7 +82,7 @@ func (t *Transaction) SetStatusToDenied() {
 func (t *Transaction) SetStatusToDeniedOnDate(date time.Time) {
 	t.approvedAt = time.Time{}
 	t.deniedAt = date
-	t.TrailDate.SetAlterationToDate(date)
+	t.TrailDate.SetAlterationToToday()
 	t.status = TR_DENIED
 }
 
@@ -100,12 +100,12 @@ func (t *Transaction) GetStatus() string {
 }
 
 // Get when the transacion was denied (if it was)
-func (t *Transaction) Denied() time.Time {
+func (t *Transaction) DeniedAt() time.Time {
 	return t.deniedAt
 }
 
 // Get when the transacion was approved (if it was)
-func (t *Transaction) Approved() time.Time {
+func (t *Transaction) ApprovedAt() time.Time {
 	return t.approvedAt
 }
 
