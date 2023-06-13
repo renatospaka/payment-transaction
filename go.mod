@@ -3,7 +3,7 @@ module github.com/renatospaka/transaction
 go 1.20
 
 require (
-	github.com/go-playground/assert/v2 v2.2.0
+	github.com/go-chi/chi v1.5.4
 	github.com/google/uuid v1.3.0
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.16.0

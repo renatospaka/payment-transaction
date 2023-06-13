@@ -6,7 +6,7 @@ import (
 	"log"
 
 	_ "github.com/lib/pq"
-	"github.com/renatospaka/transaction/configs"
+	"github.com/renatospaka/transaction/utils/configs"
 )
 
 func main() {
@@ -15,13 +15,6 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-
-	// log.Printf("DBHost: %s\n", configs.DBHost)
-	// log.Printf("DBUser: %s\n", configs.DBUser)
-	// log.Printf("DBPassword: %s\n", configs.DBPassword)
-	// log.Printf("DBPort: %s\n", configs.DBPort)
-	// log.Printf("WEBServerPort: %s\n", configs.WEBServerPort)
-	// log.Printf("GRPCServerPort: %s\n", configs.GRPCServerPort)
 
 	//open connection to the database
 	log.Println("iniciando conexão com o banco de dados")
@@ -39,4 +32,6 @@ func main() {
 		log.Panic(err)
 	}
 	defer pb.Close()
+
+
 }
