@@ -40,24 +40,29 @@ func connect() *sql.DB {
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Create(transaction *dto.TransactionCreateDto) error {
-	return p.createTransaction(transaction)
+	panic("implement me")
+	// return p.createTransaction(transaction)
 }
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Delete(transactionId *dto.TransactionDeleteDto) error {
-	return p.deleteTransaction(transactionId)
+	panic("implement me")
+	// return p.deleteTransaction(transactionId)
 }
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Update(transaction *dto.TransactionUpdateDto) error {
-	return p.updateTransaction(transaction)
+	panic("implement me")
+	// return p.updateTransaction(transaction)
 }
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Find(transactionId *dto.TransactionFindDto) (*dto.TransactionDto, error) {
-	return p.findTransaction(transactionId)
+	panic("implement me")
+	// 	return p.findTransaction(transactionId)
 }
 
 func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*dto.TransactionDto, error) {
-	return p.findAllTransactions(page, limit, sort)
+	panic("implement me")
+	// return p.findAllTransactions(page, limit, sort)
 }
