@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"net/http"
 
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
-	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
+	postgres "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
+	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
@@ -17,14 +19,24 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+	
+	ctx := context.Background()
 
 	//open connection to the database
-	ctx := context.Background()
-	repository.NewPostgresDatabase()
-	controllers := controller.NewTransactionController()
-	handler := httpServer.NewHttpServer(ctx, controllers)
+	log.Println("iniciando conexão com o banco de dados")
+	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
+	db, err := sql.Open("postgres", conn)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer db.Close()
+
+	repo := postgres.NewPostgresDatabase(db)
+	usecases := usecase.NewTransactionUsecase(repo)
+	controllers := controller.NewTransactionController(usecases)
+	webServer := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server
 	log.Println("servidor escutando porta:", configs.WEBServerPort)
-	http.ListenAndServe(":"+configs.WEBServerPort, handler.Server)
+	http.ListenAndServe(":"+configs.WEBServerPort, webServer.Server)
 }
