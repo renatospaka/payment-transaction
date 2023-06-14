@@ -6,8 +6,9 @@ import (
 	"net/http"
 
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
-	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
+	postgres "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
+	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
@@ -20,8 +21,9 @@ func main() {
 
 	//open connection to the database
 	ctx := context.Background()
-	repository.NewPostgresDatabase()
-	controllers := controller.NewTransactionController()
+	repo := postgres.NewPostgresDatabase()
+	usecases := usecase.NewTransactionUsecase(repo)
+	controllers := controller.NewTransactionController(usecases)
 	handler := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server

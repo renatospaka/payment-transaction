@@ -4,9 +4,10 @@ import (
 	// "context"
 	"database/sql"
 	"log"
+
 	_ "github.com/lib/pq"
 
-	"github.com/renatospaka/payment-transaction/core/dto"
+	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
@@ -40,30 +41,30 @@ func connect() *sql.DB {
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Create(transaction *dto.TransactionCreateDto) error {
+func (p *PostgresDatabase) Create(transaction *entity.Transaction) error {
 	panic("implement me")
 	// return p.createTransaction(transaction)
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Delete(transactionId *dto.TransactionDeleteDto) error {
+func (p *PostgresDatabase) Delete(transactionId string) error {
 	panic("implement me")
 	// return p.deleteTransaction(transactionId)
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Update(transaction *dto.TransactionUpdateDto) error {
+func (p *PostgresDatabase) Update(transaction *entity.Transaction) error {
 	panic("implement me")
 	// return p.updateTransaction(transaction)
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Find(transactionId *dto.TransactionFindDto) (*dto.TransactionDto, error) {
+func (p *PostgresDatabase) Find(transactionId string) (*entity.Transaction, error) {
 	panic("implement me")
 	// 	return p.findTransaction(transactionId)
 }
 
-func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*dto.TransactionDto, error) {
+func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*entity.Transaction, error) {
 	panic("implement me")
 	// return p.findAllTransactions(page, limit, sort)
 }

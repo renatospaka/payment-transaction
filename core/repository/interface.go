@@ -1,13 +1,13 @@
 package repository
 
 import (
-	"github.com/renatospaka/payment-transaction/core/dto"
+	"github.com/renatospaka/payment-transaction/core/entity"
 )
 
 type TransactionInterface interface {
-	Create(transaction *dto.TransactionCreateDto) error
-	Delete(transactionId *dto.TransactionDeleteDto) error
-	Update(transaction *dto.TransactionUpdateDto) error
-	Find(transactionId *dto.TransactionFindDto) (*dto.TransactionDto, error)
-	FindAll(page, limit int, sort string) ([]*dto.TransactionDto, error)
+	Create(transaction *entity.Transaction) error
+	Delete(transactionId string) error
+	Update(transaction *entity.Transaction) error
+	Find(transactionId string) (*entity.Transaction, error)
+	FindAll(page, limit int, sort string) ([]*entity.Transaction, error)
 }

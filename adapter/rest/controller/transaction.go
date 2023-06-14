@@ -1,12 +1,19 @@
 package controller
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/renatospaka/payment-transaction/core/usecase"
+)
 
 type TransactionController struct {
+	usecases *usecase.TransactionUsecase
 }
 
-func NewTransactionController() *TransactionController {
-	return &TransactionController{}
+func NewTransactionController(usecases *usecase.TransactionUsecase) *TransactionController {
+	return &TransactionController{
+		usecases: usecases,
+	}
 }
 
 func (c *TransactionController) Process(w http.ResponseWriter, r *http.Request) {
