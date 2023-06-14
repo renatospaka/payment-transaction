@@ -10,7 +10,7 @@ func (p *PostgresDatabase) findTransaction(transactionId *dto.TransactionFindDto
 	ctx := context.Background()
 	query := `
 	SELECT id, status, value, approved_at, denied_a, created_at, updated_at, deleted_at
-	FROM transactions
+	FROM public.transactions
 	WHERE id = ?`
 	// query := `
 	// UPDATE transactions

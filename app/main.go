@@ -5,10 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/lib/pq"
-	server "github.com/renatospaka/payment-transaction/adapter/http/rest"
-	"github.com/renatospaka/payment-transaction/adapter/http/rest/controller"
+	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
+	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
@@ -23,9 +22,9 @@ func main() {
 	ctx := context.Background()
 	repository.NewPostgresDatabase()
 	controllers := controller.NewTransactionController()
-	handler := server.NewHttpServer(ctx, controllers)
+	handler := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server
-	log.Println("servidor escutando porta:", configs.DBPort)
-	http.ListenAndServe(":"+configs.DBPort, handler.Server)
+	log.Println("servidor escutando porta:", configs.WEBServerPort)
+	http.ListenAndServe(":"+configs.WEBServerPort, handler.Server)
 }

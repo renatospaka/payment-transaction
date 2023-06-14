@@ -4,6 +4,7 @@ import (
 	// "context"
 	"database/sql"
 	"log"
+	_ "github.com/lib/pq"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/utils/configs"
