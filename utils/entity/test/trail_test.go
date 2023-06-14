@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/renatospaka/transaction/utils/entity"
+	"github.com/renatospaka/payment-transaction/utils/entity"
 	"github.com/stretchr/testify/assert"
 )
 

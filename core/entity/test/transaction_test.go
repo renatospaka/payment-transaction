@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/renatospaka/transaction/core/entity"
+	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -44,11 +44,11 @@ func TestSetValue(t *testing.T) {
 	err = tr.SetValue(100)
 	assert.Nil(t, err)
 	assert.Equal(t, float32(100), tr.GetValue())
-	
+
 	err = tr.SetValue(0)
 	assert.NotNil(t, err)
 	assert.Equal(t, float32(100), tr.GetValue())
-	
+
 	err = tr.SetValue(-200)
 	assert.NotNil(t, err)
 	assert.Equal(t, float32(100), tr.GetValue())

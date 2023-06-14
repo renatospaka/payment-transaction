@@ -5,8 +5,8 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/renatospaka/transaction/core/dto"
-	"github.com/renatospaka/transaction/utils/configs"
+	"github.com/renatospaka/payment-transaction/core/dto"
+	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
 type PostgresDatabase struct {
@@ -14,14 +14,14 @@ type PostgresDatabase struct {
 }
 
 func NewPostgresDatabase() *PostgresDatabase {
-	log.Println("iniciando conexão com o banco de dados")	
+	log.Println("iniciando conexão com o banco de dados")
 	db := connect()
 	return &PostgresDatabase{
 		DB: db,
 	}
 }
 
-func connect() *sql.DB  {
+func connect() *sql.DB {
 	configs, err := configs.LoadConfig("../../app")
 	if err != nil {
 		log.Panic(err)
