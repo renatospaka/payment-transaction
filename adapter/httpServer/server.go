@@ -2,7 +2,9 @@ package httpServer
 
 import (
 	"context"
+	"encoding/json"
 	"log"
+	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -42,5 +44,12 @@ func (s *HttpServer) connect() {
 		r.Get("/{id}", s.controllers.Get)
 		r.Put("/{id}", s.controllers.Modify)
 		r.Delete("/{id}", s.controllers.Remove)
+	})
+
+	s.Server.Route("/health", func (r chi.Router) {
+		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode("Healthy")
+		})
 	})
 }
