@@ -1,49 +1,47 @@
 package repository
 
 import (
-	// "context"
+	"context"
 	"database/sql"
-	"log"
+	"time"
 
 	_ "github.com/lib/pq"
 
 	"github.com/renatospaka/payment-transaction/core/entity"
-	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
 type PostgresDatabase struct {
 	DB *sql.DB
 }
 
-func NewPostgresDatabase() *PostgresDatabase {
-	log.Println("iniciando conexão com o banco de dados")
-	db := connect()
+func NewPostgresDatabase(db *sql.DB) *PostgresDatabase {
+	// db := connect()
 	return &PostgresDatabase{
 		DB: db,
 	}
 }
 
-func connect() *sql.DB {
-	configs, err := configs.LoadConfig("../../app")
-	if err != nil {
-		log.Panic(err)
-	}
+// func connect() *sql.DB {
+// 	configs, err := configs.LoadConfig("../../app")
+// 	if err != nil {
+// 		log.Panic(err)
+// 	}
 
-	//open connection to the database
-	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
-	db, err := sql.Open("postgres", conn)
-	if err != nil {
-		log.Panic(err)
-	}
-	defer db.Close()
+// 	//open connection to the database
+// 	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
+// 	db, err := sql.Open("postgres", conn)
+// 	if err != nil {
+// 		log.Panic(err)
+// 	}
+// 	defer db.Close()
 
-	return db
-}
+// 	return db
+// }
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Create(transaction *entity.Transaction) error {
-	panic("implement me")
-	// return p.createTransaction(transaction)
+	ctx := context.Background()
+	return p.createTransaction(ctx, transaction)
 }
 
 // Add context to the methodo (in near future)
@@ -67,4 +65,12 @@ func (p *PostgresDatabase) Find(transactionId string) (*entity.Transaction, erro
 func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*entity.Transaction, error) {
 	panic("implement me")
 	// return p.findAllTransactions(page, limit, sort)
+}
+
+
+func isNullDate(date time.Time) bool {
+	if date.IsZero() {
+		return true
+	}
+	return false
 }

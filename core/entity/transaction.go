@@ -20,6 +20,7 @@ type Transaction struct {
 	id     pkgEntity.ID
 	status string
 	Value  float32
+	valid  bool
 }
 
 // type Authorization struct {
@@ -38,6 +39,7 @@ func NewTransaction(value float32) (*Transaction, error) {
 		deniedAt:   time.Time{},
 		approvedAt: time.Time{},
 		TrailDate:  &pkgEntity.TrailDate{},
+		valid:      false,
 	}
 	transaction.TrailDate.SetCreationToToday()
 
@@ -128,6 +130,7 @@ func (t *Transaction) GetValue() float32 {
 
 // Validates all business rules for this transaction
 func (t *Transaction) Validate() error {
+	t.valid = false
 	if t.id.String() == "" {
 		return ErrIDIsRequired
 	}
@@ -151,5 +154,10 @@ func (t *Transaction) Validate() error {
 		return ErrInvalidStatus
 	}
 
+	t.valid = true
 	return nil
+}
+
+func (t *Transaction) IsValid() bool {
+	return t.valid
 }

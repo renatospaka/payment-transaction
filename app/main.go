@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"net/http"
 
@@ -18,10 +19,19 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+	
+	ctx := context.Background()
 
 	//open connection to the database
-	ctx := context.Background()
-	repo := postgres.NewPostgresDatabase()
+	log.Println("iniciando conexão com o banco de dados")
+	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
+	db, err := sql.Open("postgres", conn)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer db.Close()
+
+	repo := postgres.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)

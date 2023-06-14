@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"context"
+	"log"
 
+	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/core/repository"
 )
@@ -17,8 +19,9 @@ func NewTransactionUsecase(repo repository.TransactionInterface) *TransactionUse
 	}
 }
 
-func (t *TransactionUsecase) Create(transaction *entity.Transaction) error {
-	return t.createTransaction(context.Background(), transaction)
+func (t *TransactionUsecase) Create(tr *dto.TransactionCreateDto) error {
+	log.Println("usecase.transactions.create")
+	return t.createTransaction(tr)
 }
 
 func (t *TransactionUsecase) Find(transactionId string) (*entity.Transaction, error) {
