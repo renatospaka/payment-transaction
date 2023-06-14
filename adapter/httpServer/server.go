@@ -1,4 +1,4 @@
-package server
+package httpServer
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/renatospaka/payment-transaction/adapter/http/rest/controller"
+	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
 )
 
 type HttpServer struct {
