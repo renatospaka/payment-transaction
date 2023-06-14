@@ -24,9 +24,9 @@ func main() {
 	repo := postgres.NewPostgresDatabase()
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
-	handler := httpServer.NewHttpServer(ctx, controllers)
+	webServer := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server
 	log.Println("servidor escutando porta:", configs.WEBServerPort)
-	http.ListenAndServe(":"+configs.WEBServerPort, handler.Server)
+	http.ListenAndServe(":"+configs.WEBServerPort, webServer.Server)
 }
