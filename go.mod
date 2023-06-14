@@ -1,4 +1,4 @@
-module github.com/renatospaka/transaction
+module github.com/renatospaka/payment-transaction
 
 go 1.20
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/renatospaka/transaction/adapter/http/rest/controller"
+	"github.com/renatospaka/payment-transaction/adapter/http/rest/controller"
 )
 
 type HttpServer struct {

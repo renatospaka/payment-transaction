@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	pkgEntity "github.com/renatospaka/transaction/utils/entity"
+	pkgEntity "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
 const (
@@ -17,9 +17,9 @@ type Transaction struct {
 	deniedAt   time.Time
 	approvedAt time.Time
 	*pkgEntity.TrailDate
-	id         pkgEntity.ID
-	status     string
-	Value      float32
+	id     pkgEntity.ID
+	status string
+	Value  float32
 }
 
 // type Authorization struct {
