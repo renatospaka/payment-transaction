@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	pkgEntity "github.com/renatospaka/transaction/pkg/entity"
+	pkgEntity "github.com/renatospaka/transaction/utils/entity"
 )
 
 const (
