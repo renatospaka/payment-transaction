@@ -9,7 +9,7 @@ import (
 func (p *PostgresDatabase) createTransaction(transaction *dto.TransactionCreateDto) error {
 	ctx := context.Background()
 	query := `
-	INSERT INTO transactions (
+	INSERT INTO public.transactions (
 		id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at
 	) VALUES (
 		?, ?, ?, ?, ?, ?, ?, ?
