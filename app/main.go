@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 	server "github.com/renatospaka/transaction/adapter/http/rest"
+	"github.com/renatospaka/transaction/adapter/http/rest/controller"
 	repository "github.com/renatospaka/transaction/adapter/postgres"
 	"github.com/renatospaka/transaction/utils/configs"
 )
@@ -21,7 +22,8 @@ func main() {
 	//open connection to the database
 	ctx := context.Background()
 	repository.NewPostgresDatabase()
-	handler := server.NewHttpServer(ctx)
+	controllers := controller.NewTransactionController()
+	handler := server.NewHttpServer(ctx, controllers)
 	
 	//start web server
 	log.Println("servidor escutando porta:", configs.DBPort)

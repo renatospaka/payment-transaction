@@ -6,40 +6,41 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/renatospaka/transaction/adapter/http/rest/controller"
 )
 
 type HttpServer struct {
-	ctx    context.Context
-	Server *chi.Mux
+	ctx         context.Context
+	controllers *controller.TransactionController
+	Server      *chi.Mux
 }
 
-func NewHttpServer(ctx context.Context) *HttpServer {
+func NewHttpServer(ctx context.Context, controller *controller.TransactionController) *HttpServer {
 	log.Println("iniciando servidor http")
 	httpServer := &HttpServer{
-		ctx: ctx,
+		ctx:         ctx,
+		controllers: controller,
 	}
-	httpServer.Server = connect()
+	httpServer.connect()
 
 	return httpServer
 }
 
-func connect() *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	// router.Use(middleware.WithValue("jwt", configs.TokenAuth))
-	// router.Use(middleware.WithValue("JWTExpiresIn", configs.JWTExpiresIn))
+func (s *HttpServer) connect() {
+	s.Server = chi.NewRouter()
+	s.Server.Use(middleware.Logger)
+	s.Server.Use(middleware.Recoverer)
+	// s.Server.Use(middleware.WithValue("jwt", configs.TokenAuth))
+	// s.Server.Use(middleware.WithValue("JWTExpiresIn", configs.JWTExpiresIn))
 
-	router.Route("/transactions", func(r chi.Router) {
+	s.Server.Route("/transactions", func(r chi.Router) {
 		// // r.Use(jwtauth.Verifier(configs.TokenAuth))
 		// // r.Use(jwtauth.Authenticator)
 
-		// r.Post("/", ProductHandler.ProcessTransaction)
-		// r.Get("/", ProductHandler.GetAllTransactions)
-		// r.Get("/{id}", ProductHandler.GetTransaction)
-		// r.Put("/{id}", ProductHandler.ModifyTransaction)
-		// r.Delete("/{id}", ProductHandler.RemoveTransaction)
+		r.Post("/", s.controllers.Process)
+		r.Get("/", s.controllers.GetAll)
+		r.Get("/{id}", s.controllers.Get)
+		r.Put("/{id}", s.controllers.Modify)
+		r.Delete("/{id}", s.controllers.Remove)
 	})
-
-	return router
 }
