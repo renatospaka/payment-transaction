@@ -56,7 +56,7 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 	transaction, err := c.usecases.Find(id)
 	if err != nil {
 		json.NewEncoder(w).Encode("error: " + err.Error())
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -74,6 +74,27 @@ func (c *TransactionController) Modify(w http.ResponseWriter, r *http.Request) {
 
 // Delete an existing Transaction
 func (c *TransactionController) Remove(w http.ResponseWriter, r *http.Request) {
+	log.Println("http.transactions.remove")
+
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	// _, err := c.usecases.Find(id)
+	// if err != nil {
+	// 	json.NewEncoder(w).Encode("error: " + err.Error())
+	// 	w.WriteHeader(http.StatusNotFound)
+	// 	return
+	// }
+
+	err := c.usecases.Delete(id)
+	if err != nil {
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 }
 

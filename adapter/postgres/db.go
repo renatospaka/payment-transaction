@@ -28,8 +28,8 @@ func (p *PostgresDatabase) Create(transaction *entity.Transaction) error {
 
 // Add context to the methodo (in near future)
 func (p *PostgresDatabase) Delete(transactionId string) error {
-	panic("implement me")
-	// return p.deleteTransaction(transactionId)
+	ctx := context.Background()
+	return p.deleteTransaction(ctx, transactionId)
 }
 
 // Add context to the methodo (in near future)

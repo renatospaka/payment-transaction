@@ -29,8 +29,9 @@ func (t *TransactionUsecase) Find(id string) (*dto.TransactionDto, error) {
 	return t.findTransaction(context.Background(), id)
 }
 
-func (t *TransactionUsecase) Delete(transactionId string) error {
-	panic("implemente me")
+func (t *TransactionUsecase) Delete(id string) error {
+	log.Println("usecase.transactions.delete")
+	return t.deleteTransaction(context.Background(), id)
 }
 
 func (t *TransactionUsecase) Update(transaction *entity.Transaction) error {
