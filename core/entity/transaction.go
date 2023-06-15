@@ -51,6 +51,35 @@ func NewTransaction(value float32) (*Transaction, error) {
 	return transaction, nil
 }
 
+func MountTransaction(id, status string, value float32, deniedAt, approvedAt, createdAt, updatedAt, deletedAt time.Time) (*Transaction, error) {
+	uuid, err := pkgEntity.Parse(id)
+	if err != nil {
+		return nil, err
+	}
+
+	transaction := &Transaction{
+		deniedAt:   deniedAt,
+		approvedAt: approvedAt,
+		TrailDate:  &pkgEntity.TrailDate{},
+		id:         uuid,
+		status:     status,
+		Value:      value,
+		valid:      false,
+	}
+	transaction.TrailDate.SetCreationToDate(createdAt)
+	transaction.TrailDate.SetAlterationToToday()
+	if !deletedAt.IsZero() {
+		transaction.TrailDate.SetDeletionToDate(deletedAt)
+	}
+
+	// deliver the new transaction validated
+	err = transaction.Validate()
+	if err != nil {
+		return nil, err
+	}
+	return transaction, nil
+}
+
 // Get the ID of the transaction
 func (t *Transaction) GetID() string {
 	return t.id.String()
