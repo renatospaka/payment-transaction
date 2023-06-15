@@ -24,12 +24,13 @@ func main() {
 
 	//open connection to the database
 	log.Println("iniciando conexão com o banco de dados")
-	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + "/" + configs.DBName + "?sslmode=disable"
+	conn := "postgresql://" + configs.DBUser + ":" + configs.DBPassword + "@" + configs.DBHost + ":" + configs.DBPort + "/" + configs.DBName + "?sslmode=disable"
 	db, err := sql.Open("postgres", conn)
 	if err != nil {
 		log.Panic(err)
 	}
 	defer db.Close()
+	log.Printf("banco de dados -> %s\n", conn)
 
 	repo := postgres.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
