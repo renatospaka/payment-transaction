@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	"time"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
@@ -32,14 +31,17 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 		tr       dto.TransactionDto
 		approved sql.NullTime
 		denied   sql.NullTime
+		created  sql.NullTime
+		updated  sql.NullTime
 		deleted  sql.NullTime
 	)
 	err = rows.Scan(&tr.ID, &tr.Status, &tr.Value,
-										&approved,
-										&denied,
-										&tr.CreatedAt,
-										&tr.UpdatedAt,
-										&deleted)
+		&approved,
+		&denied,
+		&created,
+		&updated,
+		&deleted,
+	)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, err // is this necessary????)
@@ -47,33 +49,24 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 		return nil, err
 	}
 
-	if approved.Valid {
-		tr.ApprovedAt, _ = time.Parse(formatISO, approved.Time.String())
-	} else {
-		tr.ApprovedAt = nullDate
-	}
-
-	if denied.Valid {
-		tr.DeniedAt, _ = time.Parse(formatISO, denied.Time.String())
-	} else {
-		tr.DeniedAt = nullDate
-	}
-
-	if deleted.Valid {
-		tr.DeletedAt, _ = time.Parse(formatISO, deleted.Time.String())
-	} else {
-		tr.DeletedAt = nullDate
-	}
+	log.Printf("postgres - findTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", created.Time.String(), updated.Time.String(), deleted.Time.String())
+	
+	approvedAt := formatNullDate(approved)
+	deniedAt := formatNullDate(denied)
+	createdAt := formatNullDate(created)
+	updatedAt := formatNullDate(updated)
+	deletedAt := formatNullDate(deleted)
+	log.Printf("postgres - findTransaction 2 - createdAt: %v, updatedAt: %v, deletedAt: %v\n", createdAt, updatedAt, deletedAt)
 
 	transaction, err := entity.MountTransaction(
 		tr.ID,
 		tr.Status,
 		tr.Value,
-		tr.DeletedAt,
-		tr.ApprovedAt,
-		tr.CreatedAt,
-		tr.UpdatedAt,
-		tr.DeletedAt,
+		deniedAt,
+		approvedAt,
+		createdAt,
+		updatedAt,
+		deletedAt,
 	)
 	if err != nil || !transaction.IsValid() {
 		return nil, err

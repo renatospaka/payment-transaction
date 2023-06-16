@@ -10,19 +10,8 @@ import (
 
 func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Transaction) error {
 	log.Println("repository.transactions.createTransaction")
-	query := `
-	INSERT INTO transactions
-		(id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at) 
-	VALUES
-		($1, $2, $3, $4, $5, $6, $7, $8)
-	`
-	stmt, err := p.DB.PrepareContext(ctx, query)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
 
-	var approvedAt, deniedAt, createdAt, updatedAt, deletedAt interface{}	
+	var approvedAt, deniedAt, createdAt, updatedAt, deletedAt interface{}
 
 	approvedAt = tr.ApprovedAt().Format(time.UnixDate)
 	if tr.ApprovedAt().IsZero() {
@@ -48,16 +37,31 @@ func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Tra
 	if tr.DeletedAt().IsZero() {
 		deletedAt = nil
 	}
-	
-	_, err = stmt.ExecContext(ctx, 
-												tr.GetID(), 
-												tr.GetStatus(), 
-												tr.GetValue(), 
-												approvedAt, 
-												deniedAt, 
-												createdAt, 
-												updatedAt, 
-												deletedAt)
+
+	log.Printf("postgres - createTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", createdAt, updatedAt, deletedAt)
+
+	query := `
+	INSERT INTO transactions
+		(id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at) 
+	VALUES
+		($1, $2, $3, $4, $5, $6, $7, $8)
+	`
+	stmt, err := p.DB.PrepareContext(ctx, query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.ExecContext(ctx,
+		tr.GetID(),
+		tr.GetStatus(),
+		tr.GetValue(),
+		approvedAt,
+		deniedAt,
+		createdAt,
+		updatedAt,
+		deletedAt,
+	)
 	if err != nil {
 		return err
 	}

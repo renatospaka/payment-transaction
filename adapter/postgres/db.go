@@ -8,12 +8,8 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/renatospaka/payment-transaction/core/entity"
+	"github.com/renatospaka/payment-transaction/utils"
 )
-
-var (
-	formatISO string = "2023-06-15T19:07:06.000"
-	nullDate time.Time = time.Time{}
-) 
 
 type PostgresDatabase struct {
 	DB *sql.DB
@@ -63,4 +59,11 @@ func (p *PostgresDatabase) Find(id string) (*entity.Transaction, error) {
 func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*entity.Transaction, error) {
 	panic("implement me")
 	// return p.findAllTransactions(page, limit, sort)
+}
+
+func formatNullDate(nullDate sql.NullTime) time.Time {
+	if nullDate.Valid {
+		return nullDate.Time
+	} 
+	return utils.NULL_DATE
 }
