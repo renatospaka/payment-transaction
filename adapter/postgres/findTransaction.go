@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
+	"time"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
@@ -27,18 +28,41 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 		return nil, err
 	}
 
-	var tr dto.TransactionDto
-	err = rows.Scan(&tr.ID, &tr.Status, &tr.Value, 
-										&tr.ApprovedAt, 
-										&tr.DeniedAt, 
-										&tr.CreatedAt, 
-										&tr.UpdatedAt, 
-										&tr.DeletedAt)
+	var (
+		tr       dto.TransactionDto
+		approved sql.NullTime
+		denied   sql.NullTime
+		deleted  sql.NullTime
+	)
+	err = rows.Scan(&tr.ID, &tr.Status, &tr.Value,
+										&approved,
+										&denied,
+										&tr.CreatedAt,
+										&tr.UpdatedAt,
+										&deleted)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, err 	// is this necessary????)
+			return nil, err // is this necessary????)
 		}
 		return nil, err
+	}
+
+	if approved.Valid {
+		tr.ApprovedAt, _ = time.Parse(formatISO, approved.Time.String())
+	} else {
+		tr.ApprovedAt = nullDate
+	}
+
+	if denied.Valid {
+		tr.DeniedAt, _ = time.Parse(formatISO, denied.Time.String())
+	} else {
+		tr.DeniedAt = nullDate
+	}
+
+	if deleted.Valid {
+		tr.DeletedAt, _ = time.Parse(formatISO, deleted.Time.String())
+	} else {
+		tr.DeletedAt = nullDate
 	}
 
 	transaction, err := entity.MountTransaction(

@@ -30,7 +30,6 @@ func main() {
 		log.Panic(err)
 	}
 	defer db.Close()
-	log.Printf("banco de dados -> %s\n", conn)
 
 	repo := postgres.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)

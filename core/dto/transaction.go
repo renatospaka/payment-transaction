@@ -16,6 +16,7 @@ type TransactionDto struct {
 }
 
 type TransactionCreateDto struct {
+	ID    string  `json:"transaction_id"`
 	Value float32 `json:"value"`
 }
 
