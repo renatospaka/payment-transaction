@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"log"
 	"time"
 
 	pkgEntity "github.com/renatospaka/payment-transaction/utils/entity"
@@ -51,8 +50,6 @@ func MountTransaction(id, status string, value float32, deniedAt time.Time, appr
 		return nil, err
 	}
 
-	log.Printf("entity - MountTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", createdAt, updatedAt, deletedAt)
-
 	transaction := &Transaction{
 		deniedAt:   deniedAt,
 		approvedAt: approvedAt,
@@ -68,7 +65,6 @@ func MountTransaction(id, status string, value float32, deniedAt time.Time, appr
 		transaction.TrailDate.SetDeletionToDate(deletedAt)
 	}
 
-	log.Printf("entity - MountTransaction 2 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", transaction.CreatedAt(), transaction.UpdatedAt(), transaction.DeletedAt())
 	// deliver the new transaction validated
 	err = transaction.Validate()
 	if err != nil {

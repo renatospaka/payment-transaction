@@ -3,7 +3,7 @@ package utils
 import "time"
 
 const (
-	ISO_FORMAT string = "2023-06-15T19:07:06.000"
+	ISO_FORMAT string = "2006-01-02T15:04:05:07Z000" // similar to time.RFC3339
 )
 
 var (

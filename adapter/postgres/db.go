@@ -3,12 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"time"
 
 	_ "github.com/lib/pq"
 
 	"github.com/renatospaka/payment-transaction/core/entity"
-	"github.com/renatospaka/payment-transaction/utils"
 )
 
 type PostgresDatabase struct {
@@ -59,11 +57,4 @@ func (p *PostgresDatabase) Find(id string) (*entity.Transaction, error) {
 func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*entity.Transaction, error) {
 	panic("implement me")
 	// return p.findAllTransactions(page, limit, sort)
-}
-
-func formatNullDate(nullDate sql.NullTime) time.Time {
-	if nullDate.Valid {
-		return nullDate.Time
-	} 
-	return utils.NULL_DATE
 }

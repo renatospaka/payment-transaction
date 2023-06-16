@@ -27,8 +27,8 @@ func (c *TransactionController) Process(w http.ResponseWriter, r *http.Request) 
 
 	var tr dto.TransactionCreateDto
 	if err := json.NewDecoder(r.Body).Decode(&tr); err != nil {
-		json.NewEncoder(w).Encode("error: " + err.Error())
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode("error: " + err.Error())
 		return
 	}
 
@@ -56,9 +56,9 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tr, err := c.usecases.Find(id)
-	if err != nil {
-		json.NewEncoder(w).Encode("error: " + err.Error())
+	if tr == nil || err != nil {
 		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode("error: " + err.Error())
 		return
 	}
 
@@ -109,17 +109,10 @@ func (c *TransactionController) Remove(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// _, err := c.usecases.Find(id)
-	// if err != nil {
-	// 	json.NewEncoder(w).Encode("error: " + err.Error())
-	// 	w.WriteHeader(http.StatusNotFound)
-	// 	return
-	// }
-
 	err := c.usecases.Delete(id)
 	if err != nil {
-		json.NewEncoder(w).Encode("error: " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("error: " + err.Error())
 		return
 	}
 	w.WriteHeader(http.StatusOK)

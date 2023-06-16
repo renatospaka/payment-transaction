@@ -7,6 +7,7 @@ import (
 
 func (p *PostgresDatabase) deleteTransaction(ctx context.Context, id string) error {
 	log.Println("repository.transactions.deleteTransaction")
+
 	query := `
 	DELETE FROM transactions
 	WHERE id=$1
