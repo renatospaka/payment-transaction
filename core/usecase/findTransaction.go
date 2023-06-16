@@ -3,10 +3,9 @@ package usecase
 import (
 	"context"
 	"errors"
-	"log"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
-	// "github.com/renatospaka/payment-transaction/utils"
+	"github.com/renatospaka/payment-transaction/utils/dateTime"
 )
 
 func (t *TransactionUsecase) findTransaction(ctx context.Context, id string) (*dto.TransactionDto, error) {
@@ -15,22 +14,22 @@ func (t *TransactionUsecase) findTransaction(ctx context.Context, id string) (*d
 	}
 
 	transaction, err := t.repo.Find(id)
-	if err != nil || !transaction.IsValid() {
+	if err != nil {
 		return nil, err
+	} 
+	if transaction == nil {
+		return nil, errors.New("transaction id not found")
 	}
-
-	log.Printf("usecase - findTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", transaction.CreatedAt(), transaction.UpdatedAt(), transaction.DeletedAt())
 
 	tr := &dto.TransactionDto{
 		ID:         transaction.GetID(),
 		Status:     transaction.GetStatus(),
 		Value:      transaction.GetValue(),
-		DeniedAt:   transaction.DeniedAt().String(),
-		ApprovedAt: transaction.ApprovedAt().String(),
-		CreatedAt:  transaction.CreatedAt().String(),
-		UpdatedAt:  transaction.UpdatedAt().String(),
-		DeletedAt:  transaction.DeletedAt().String(),
+		DeniedAt:   dateTime.FormatDateToNull(transaction.DeniedAt()),
+		ApprovedAt: dateTime.FormatDateToNull(transaction.ApprovedAt()),
+		CreatedAt:  dateTime.FormatDateToNull(transaction.CreatedAt()),
+		UpdatedAt:  dateTime.FormatDateToNull(transaction.UpdatedAt()),
+		DeletedAt:  dateTime.FormatDateToNull(transaction.DeletedAt()),
 	}
-	log.Printf("usecase - findTransaction 2 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", transaction.CreatedAt().String(), transaction.UpdatedAt().String(), transaction.DeletedAt().String())
 	return tr, nil
 }

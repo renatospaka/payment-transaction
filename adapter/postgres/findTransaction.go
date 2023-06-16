@@ -7,6 +7,7 @@ import (
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
+	"github.com/renatospaka/payment-transaction/utils/dateTime"
 )
 
 func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*entity.Transaction, error) {
@@ -44,19 +45,16 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, err // is this necessary????)
+			return nil, nil
 		}
 		return nil, err
 	}
 
-	log.Printf("postgres - findTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", created.Time.String(), updated.Time.String(), deleted.Time.String())
-	
-	approvedAt := formatNullDate(approved)
-	deniedAt := formatNullDate(denied)
-	createdAt := formatNullDate(created)
-	updatedAt := formatNullDate(updated)
-	deletedAt := formatNullDate(deleted)
-	log.Printf("postgres - findTransaction 2 - createdAt: %v, updatedAt: %v, deletedAt: %v\n", createdAt, updatedAt, deletedAt)
+	approvedAt := dateTime.FormatNullDate(approved)
+	deniedAt := dateTime.FormatNullDate(denied)
+	createdAt := dateTime.FormatNullDate(created)
+	updatedAt := dateTime.FormatNullDate(updated)
+	deletedAt := dateTime.FormatNullDate(deleted)
 
 	transaction, err := entity.MountTransaction(
 		tr.ID,
