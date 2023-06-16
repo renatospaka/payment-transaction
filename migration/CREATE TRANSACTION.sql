@@ -9,3 +9,6 @@ CREATE TABLE IF NOT EXISTS transactions (
   deleted_at  timestamp,
   PRIMARY KEY (id)
 );
+
+ALTER TABLE transactions
+ADD COLUMN authorization_id   UUID;

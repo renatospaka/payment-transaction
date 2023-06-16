@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"log"
 	"time"
 
 	pkgEntity "github.com/renatospaka/payment-transaction/utils/entity"
@@ -23,13 +24,6 @@ type Transaction struct {
 	valid  bool
 }
 
-// type Authorization struct {
-// 	id          pkgEntity.ID
-// 	processedAt time.Time
-// 	status      string
-// 	value       float32
-// }
-
 // Create a new transaction
 func NewTransaction(value float32) (*Transaction, error) {
 	transaction := &Transaction{
@@ -51,11 +45,13 @@ func NewTransaction(value float32) (*Transaction, error) {
 	return transaction, nil
 }
 
-func MountTransaction(id, status string, value float32, deniedAt, approvedAt, createdAt, updatedAt, deletedAt time.Time) (*Transaction, error) {
+func MountTransaction(id, status string, value float32, deniedAt time.Time, approvedAt time.Time, createdAt time.Time, updatedAt time.Time, deletedAt time.Time) (*Transaction, error) {
 	uuid, err := pkgEntity.Parse(id)
 	if err != nil {
 		return nil, err
 	}
+
+	log.Printf("entity - MountTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", createdAt, updatedAt, deletedAt)
 
 	transaction := &Transaction{
 		deniedAt:   deniedAt,
@@ -72,6 +68,7 @@ func MountTransaction(id, status string, value float32, deniedAt, approvedAt, cr
 		transaction.TrailDate.SetDeletionToDate(deletedAt)
 	}
 
+	log.Printf("entity - MountTransaction 2 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", transaction.CreatedAt(), transaction.UpdatedAt(), transaction.DeletedAt())
 	// deliver the new transaction validated
 	err = transaction.Validate()
 	if err != nil {
