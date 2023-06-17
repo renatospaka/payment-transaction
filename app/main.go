@@ -31,12 +31,13 @@ func main() {
 	}
 	defer db.Close()
 
+	log.Println("iniciando gerador de transações")
 	repo := postgres.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server
-	log.Println("servidor escutando porta:", configs.WEBServerPort)
+	log.Printf("gerador de transações escutando porta: %s\n", configs.WEBServerPort)
 	http.ListenAndServe(":"+configs.WEBServerPort, webServer.Server)
 }

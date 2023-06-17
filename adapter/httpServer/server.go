@@ -19,7 +19,7 @@ type HttpServer struct {
 }
 
 func NewHttpServer(ctx context.Context, controller *controller.TransactionController) *HttpServer {
-	log.Println("iniciando servidor http")
+	log.Println("iniciando conexão com o servidor web")
 	httpServer := &HttpServer{
 		ctx:         ctx,
 		controllers: controller,
