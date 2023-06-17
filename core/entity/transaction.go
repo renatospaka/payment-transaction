@@ -19,7 +19,7 @@ type Transaction struct {
 	*pkgEntity.TrailDate
 	id     pkgEntity.ID
 	status string
-	Value  float32
+	value  float32
 	valid  bool
 }
 
@@ -27,7 +27,7 @@ type Transaction struct {
 func NewTransaction(value float32) (*Transaction, error) {
 	transaction := &Transaction{
 		id:         pkgEntity.NewID(),
-		Value:      value,
+		value:      value,
 		status:     TR_PENDING,
 		deniedAt:   time.Time{},
 		approvedAt: time.Time{},
@@ -56,7 +56,7 @@ func MountTransaction(id, status string, value float32, deniedAt time.Time, appr
 		TrailDate:  &pkgEntity.TrailDate{},
 		id:         uuid,
 		status:     status,
-		Value:      value,
+		value:      value,
 		valid:      false,
 	}
 	transaction.TrailDate.SetCreationToDate(createdAt)
@@ -135,11 +135,11 @@ func (t *Transaction) ApprovedAt() time.Time {
 
 // Change the transaction value and validate it before committing it
 func (t *Transaction) SetValue(value float32) (err error) {
-	current := t.Value
-	t.Value = value
+	current := t.value
+	t.value = value
 
 	if err = t.Validate(); err != nil {
-		t.Value = current
+		t.value = current
 		return err
 	}
 	return nil
@@ -147,7 +147,7 @@ func (t *Transaction) SetValue(value float32) (err error) {
 
 // Get the current value of the transaction
 func (t *Transaction) GetValue() float32 {
-	return t.Value
+	return t.value
 }
 
 // Validates all business rules for this transaction
@@ -161,11 +161,11 @@ func (t *Transaction) Validate() error {
 		return ErrInvalidID
 	}
 
-	if t.Value < 0 {
+	if t.value < 0 {
 		return ErrValueIsNegative
 	}
 
-	if t.Value == 0 {
+	if t.value == 0 {
 		return ErrValueIsZero
 	}
 
@@ -180,6 +180,7 @@ func (t *Transaction) Validate() error {
 	return nil
 }
 
+// Return whether the structure is valid or not
 func (t *Transaction) IsValid() bool {
 	return t.valid
 }
