@@ -31,18 +31,18 @@ func (t *TransactionUsecase) Create(tr *dto.TransactionCreateDto) (*dto.Transact
 		return nil, err
 	}
 
-// 	// Call the Authotization service and update status accordingly
-// 	auth, err := authorization.Process()
-// 	if err != nil {
-// 		return nil, err
-// 	} 
-// 	authorization_id := authorization.authorization_id
+	// // Call the Authotization service and update status accordingly
+	// auth, err := authorization.Process()
+	// if err != nil {
+	// 	return nil, err
+	// } 
+	// authorization_id := authorization.authorization_id
 
-// 	if auth.Status == entity.TR_APPROVED {
-// 		err = t.approveTransaction(ctx, tr, authorization_id)
-// 	} else if auth.Status == entity.TR_DENIED {
-// 		err = t.denyTransaction(ctx, tr, authorization_id)
-// 	}
+	// if auth.Status == entity.TR_APPROVED {
+	// 	err = t.approveTransaction(ctx, tr, authorization_id)
+	// } else if auth.Status == entity.TR_DENIED {
+	// 	err = t.denyTransaction(ctx, tr, authorization_id)
+	// }
 
 	// Find the new Transaction the reply to the caller
 	transaction, err := t.findTransaction(ctx, tr.ID)
