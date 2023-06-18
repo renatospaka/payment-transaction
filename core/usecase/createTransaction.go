@@ -8,7 +8,7 @@ import (
 )
 
 func (t *TransactionUsecase) createTransaction(ctx context.Context, tr *dto.TransactionCreateDto) error {
-	transaction, err := entity.NewTransaction(tr.Value)
+	transaction, err := entity.NewTransaction(tr.ClientID, tr.Value)
 	if err != nil || !transaction.IsValid() {
 		return err
 	}

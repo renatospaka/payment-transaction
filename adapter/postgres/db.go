@@ -14,7 +14,6 @@ type PostgresDatabase struct {
 }
 
 func NewPostgresDatabase(db *sql.DB) *PostgresDatabase {
-	// db := connect()
 	return &PostgresDatabase{
 		DB: db,
 	}

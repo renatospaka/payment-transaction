@@ -38,8 +38,6 @@ func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Tra
 		deletedAt = nil
 	}
 
-	log.Printf("postgres - createTransaction 1 - CreatedAt: %v, UpdatedAt: %v, DeletedAt: %v\n", createdAt, updatedAt, deletedAt)
-
 	query := `
 	INSERT INTO transactions
 		(id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at) 

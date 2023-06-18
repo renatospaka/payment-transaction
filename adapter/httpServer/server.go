@@ -8,8 +8,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
-	middlewares "github.com/renatospaka/payment-transaction/adapter/rest/middleware"
+	"github.com/renatospaka/payment-transaction/adapter/web/controller"
+	middlewares "github.com/renatospaka/payment-transaction/adapter/web/middleware"
 )
 
 type HttpServer struct {
@@ -19,7 +19,7 @@ type HttpServer struct {
 }
 
 func NewHttpServer(ctx context.Context, controller *controller.TransactionController) *HttpServer {
-	log.Println("iniciando servidor http")
+	log.Println("iniciando conexão com o servidor web")
 	httpServer := &HttpServer{
 		ctx:         ctx,
 		controllers: controller,
@@ -48,7 +48,7 @@ func (s *HttpServer) connect() {
 		r.Delete("/{id}", s.controllers.Remove)
 	})
 
-	s.Server.Route("/health", func (r chi.Router) {
+	s.Server.Route("/health", func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			_ = json.NewEncoder(w).Encode("Healthy")

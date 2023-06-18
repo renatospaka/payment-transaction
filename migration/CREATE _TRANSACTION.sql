@@ -1,5 +1,7 @@
 CREATE TABLE IF NOT EXISTS transactions (
-  id          UUID, 
+  id                UUID, 
+  authorization_id  UUID,
+  transaction_id    UUID,
   status      varchar(15), 
   value       float, 
   approved_at timestamp, 
@@ -9,6 +11,3 @@ CREATE TABLE IF NOT EXISTS transactions (
   deleted_at  timestamp,
   PRIMARY KEY (id)
 );
-
-ALTER TABLE transactions
-ADD COLUMN authorization_id   UUID;

@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
-	postgres "github.com/renatospaka/payment-transaction/adapter/postgres"
-	"github.com/renatospaka/payment-transaction/adapter/rest/controller"
+	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
+	"github.com/renatospaka/payment-transaction/adapter/web/controller"
 	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
@@ -19,7 +19,7 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	
+
 	ctx := context.Background()
 
 	//open connection to the database
@@ -31,12 +31,13 @@ func main() {
 	}
 	defer db.Close()
 
-	repo := postgres.NewPostgresDatabase(db)
+	log.Println("iniciando gerador de transações")
+	repo := repository.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)
 
 	//start web server
-	log.Println("servidor escutando porta:", configs.WEBServerPort)
+	log.Printf("gerador de transações escutando porta: %s\n", configs.WEBServerPort)
 	http.ListenAndServe(":"+configs.WEBServerPort, webServer.Server)
 }

@@ -8,13 +8,14 @@ import (
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
+	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
 func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*entity.Transaction, error) {
 	log.Println("repository.transactions.findTransaction")
 
 	query := `
-	SELECT id, status, value , approved_at, denied_at, created_at, updated_at, deleted_at
+	SELECT id, client_id, authorization_id, status, value , approved_at, denied_at, created_at, updated_at, deleted_at
 	FROM transactions
 	WHERE id = $1`
 	stmt, err := p.DB.PrepareContext(ctx, query)
@@ -36,7 +37,12 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 		updated  sql.NullTime
 		deleted  sql.NullTime
 	)
-	err = rows.Scan(&tr.ID, &tr.Status, &tr.Value,
+	err = rows.Scan(
+		&tr.ID, 
+		&tr.ClientID, 
+		&tr.AuthorizationID, 
+		&tr.Status, 
+		&tr.Value,
 		&approved,
 		&denied,
 		&created,
@@ -56,19 +62,23 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	updatedAt := dateTime.FormatNullDate(updated)
 	deletedAt := dateTime.FormatNullDate(deleted)
 
-	transaction, err := entity.MountTransaction(
-		tr.ID,
-		tr.Status,
-		tr.Value,
-		deniedAt,
-		approvedAt,
-		createdAt,
-		updatedAt,
-		deletedAt,
-	)
+	existing := &entity.TransactionMount{
+		ID:              tr.ID,
+		ClientID:        tr.ClientID,
+		AuthorizationID: tr.AuthorizationID,
+		Value:           tr.Value,
+		Status:          tr.Status,
+		DeniedAt:        deniedAt,
+		ApprovedAt:      approvedAt,
+		TrailDate:       &utils.TrailDate{},
+	}
+	existing.SetCreationToDate(createdAt)
+	existing.SetAlterationToDate(updatedAt)
+	existing.SetDeletionToDate(deletedAt)
+
+	transaction, err := entity.MountTransaction(existing)
 	if err != nil || !transaction.IsValid() {
 		return nil, err
 	}
-
 	return transaction, nil
 }
