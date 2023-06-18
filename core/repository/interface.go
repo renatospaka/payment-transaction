@@ -9,7 +9,7 @@ type TransactionInterface interface {
 	Delete(string) error
 	Update(*entity.Transaction) error
 	Find(string) (*entity.Transaction, error)
-	FindAll(page, limit int, sort string) ([]*entity.Transaction, error)
+	FindAll(page, limit int) ([]*entity.Transaction, error)
 	Approve(*entity.Transaction) error
 	Deny(*entity.Transaction) error
 }
