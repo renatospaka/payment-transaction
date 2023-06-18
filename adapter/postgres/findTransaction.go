@@ -30,18 +30,20 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	}
 
 	var (
-		tr       dto.TransactionDto
-		approved sql.NullTime
-		denied   sql.NullTime
-		created  sql.NullTime
-		updated  sql.NullTime
-		deleted  sql.NullTime
+		tr            dto.TransactionDto
+		approved      sql.NullTime
+		denied        sql.NullTime
+		created       sql.NullTime
+		updated       sql.NullTime
+		deleted       sql.NullTime
+		client        sql.NullString
+		authorization sql.NullString
 	)
 	err = rows.Scan(
-		&tr.ID, 
-		&tr.ClientID, 
-		&tr.AuthorizationID, 
-		&tr.Status, 
+		&tr.ID,
+		&client,
+		&authorization,
+		&tr.Status,
 		&tr.Value,
 		&approved,
 		&denied,
@@ -61,11 +63,13 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	createdAt := dateTime.FormatNullDate(created)
 	updatedAt := dateTime.FormatNullDate(updated)
 	deletedAt := dateTime.FormatNullDate(deleted)
+	clientId, _ := utils.Parse(dateTime.FormatNullString(client))
+	authorizationId, _ := utils.Parse(dateTime.FormatNullString(authorization))
 
 	existing := &entity.TransactionMount{
 		ID:              tr.ID,
-		ClientID:        tr.ClientID,
-		AuthorizationID: tr.AuthorizationID,
+		ClientID:        clientId.String(),
+		AuthorizationID: authorizationId.String(),
 		Value:           tr.Value,
 		Status:          tr.Status,
 		DeniedAt:        deniedAt,

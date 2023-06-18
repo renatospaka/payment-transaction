@@ -235,6 +235,7 @@ func (t *Transaction) GetValue() float32 {
 // Validates all business rules for this transaction
 func (t *Transaction) Validate() error {
 	t.valid = false
+	
 	if t.id.String() == "" {
 		return ErrIDIsRequired
 	}
