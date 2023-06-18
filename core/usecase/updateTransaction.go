@@ -9,17 +9,17 @@ import (
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
-func (t *TransactionUsecase) updateTransaction(ctx context.Context, id string, tr *dto.TransactionUpdateDto) error {
+func (t *TransactionUsecase) updateTransaction(ctx context.Context, tr *dto.TransactionUpdateDto) error {
 	log.Println("usecase.transactions.update")
-	if id == "" {
+	if tr.ID == "" {
 		return errors.New("id is required")
 	}
 
-	if _, err := utils.Parse(id); err != nil {
+	if _, err := utils.Parse(tr.ID); err != nil {
 		return errors.New("invalid id")
 	}
 
-	transaction, err := t.repo.Find(id)
+	transaction, err := t.repo.Find(tr.ID)
 	if err != nil {
 		return err
 	} 

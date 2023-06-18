@@ -9,9 +9,9 @@ import (
 	pkgTrail "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
-func (t *TransactionUsecase) approveTransaction(ctx context.Context, tr *dto.TransactionAuthorizeDto) error {
-	log.Println("usecase.transactions.approveTransaction")
-	
+func (t *TransactionUsecase) denyTransaction(tx context.Context, tr *dto.TransactionAuthorizeDto) error {
+	log.Println("usecase.transactions.denyTransaction")
+
 	mounting := &entity.TransactionMount{
 		ID:              tr.ID,
 		ClientID:        tr.ClientID,
@@ -22,7 +22,7 @@ func (t *TransactionUsecase) approveTransaction(ctx context.Context, tr *dto.Tra
 	if err != nil {
 		return err
 	}
-	transaction.SetStatusToApproved(tr.AuthorizationId)
+	transaction.SetStatusToDenied(tr.AuthorizationId)
 
-	return t.repo.Approve(transaction)
+	return t.repo.Deny(transaction)
 }

@@ -35,3 +35,10 @@ type TransactionDeleteDto struct {
 type TransactionFindAllResponseDto struct {
 	Transactions []*TransactionDto
 }
+
+type TransactionAuthorizeDto struct {
+	ID              string  `json:"transaction_id"`
+	ClientID        string  `json:"client_id"`
+	AuthorizationId string  `json:"authorization_id"`
+	Value           float32 `json:"value"`
+}

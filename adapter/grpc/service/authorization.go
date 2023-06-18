@@ -18,10 +18,10 @@ func NewAuthorizationService(usecases *usecase.TransactionUsecase) *Authorizatio
 }
 
 func (a *AuthorizationService) Process(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
-	auth := &pb.AuthorizationResponse{
-		ClientId:        in.ClientId,
-		TransactionId:   in.TransactionId,
-		Value:           in.Value,
+	auth := &pb.AuthorizationRequest{
+		ClientId:      in.ClientId,
+		TransactionId: in.TransactionId,
+		Value:         in.Value,
 	}
 
 	response, err := a.usecases.Authorize(auth)
