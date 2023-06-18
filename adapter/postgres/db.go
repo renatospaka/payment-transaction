@@ -42,9 +42,9 @@ func (p *PostgresDatabase) Delete(id string) error {
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Update(transaction *entity.Transaction) error {
-	panic("implement me")
-	// return p.updateTransaction(transaction)
+func (p *PostgresDatabase) Update(tr *entity.Transaction) error {
+	ctx := context.Background()
+	return p.updateTransaction(ctx, tr)
 }
 
 // Add context to the methodo (in near future)

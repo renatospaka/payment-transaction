@@ -68,38 +68,40 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 
-// Update basic information about a previously processed Transaction
+// Update the value of the Transaction
+// No validation need but transaction ID must exists
 func (c *TransactionController) Modify(w http.ResponseWriter, r *http.Request) {
-	// log.Println("http.transactions.modify")
+	log.Println("http.transactions.modify")
 
-	// id := chi.URLParam(r, "id")
-	// if id == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	// var tr dto.TransactionUpdateDto
-	// err := json.NewDecoder(r.Body).Decode(&tr)
-	// if err != nil {
-	// 	json.NewEncoder(w).Encode("error: " + err.Error())
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
+	var tr dto.TransactionUpdateDto
+	err := json.NewDecoder(r.Body).Decode(&tr)
+	if err != nil {
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	// err = c.usecases.Update(id, &tr)
-	// if err != nil {
-	// 	json.NewEncoder(w).Encode("error: " + err.Error())
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+	err = c.usecases.Update(id, &tr)
+	if err != nil {
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	// w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(&tr)
+	json.NewEncoder(w).Encode(&tr)
 }
 
 
 // Delete an existing Transaction
+// No validation need but transaction ID must exists
 func (c *TransactionController) Remove(w http.ResponseWriter, r *http.Request) {
 	log.Println("http.transactions.remove")
 

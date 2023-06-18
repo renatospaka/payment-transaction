@@ -66,9 +66,7 @@ func (t *TransactionUsecase) Delete(id string) error {
 
 
 func (t *TransactionUsecase) Update(id string, tr *dto.TransactionUpdateDto) error {
-	// log.Println("usecase.transactions.update")
-	// return t.updateTransaction(context.Background(), id, tr)
-	panic("implemente me")
+	return t.updateTransaction(context.Background(), id, tr)
 }
 
 
