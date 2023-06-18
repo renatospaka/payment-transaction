@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 
+	// grpcClient "github.com/renatospaka/payment-transaction/adapter/grpc/client"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
 	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -36,6 +39,17 @@ func main() {
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)
+
+	// client := grpcClient.NewGrpcClient(ctx)
+	log.Println("estabelecendo conexão com o servidor gRPC")
+	options := make([]grpc.DialOption, 0)
+	client, err := grpc.Dial(":" + configs.GRPCServerPort, options...)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer client.Close()
+
+	srv := pb.NewAuthorizationServiceClient(client)
 
 	//start web server
 	log.Printf("gerador de transações escutando porta: %s\n", configs.WEBServerPort)
