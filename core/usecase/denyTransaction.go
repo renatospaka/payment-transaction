@@ -15,6 +15,7 @@ func (t *TransactionUsecase) denyTransaction(tx context.Context, tr *dto.Transac
 	mounting := &entity.TransactionMount{
 		ID:              tr.ID,
 		ClientID:        tr.ClientID,
+		AuthorizationID: tr.AuthorizationId,
 		Value:           tr.Value,
 		TrailDate:       &pkgTrail.TrailDate{},
 	}

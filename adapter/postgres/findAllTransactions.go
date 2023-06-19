@@ -7,6 +7,7 @@ import (
 
 	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
+	"github.com/renatospaka/payment-transaction/utils/strings"
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
@@ -30,7 +31,6 @@ func (p *PostgresDatabase) findAllTransactions(ctx context.Context, page int, li
 	}
 	defer rows.Close()
 
-	// log.Printf("repository.transactions.findAllTransactions - limit: %d, offset: %d\n", limit, offset)
 	var (
 		transactions  []*entity.Transaction
 		transaction   *entity.Transaction
@@ -61,10 +61,8 @@ func (p *PostgresDatabase) findAllTransactions(ctx context.Context, page int, li
 		)
 		if err != nil {
 			if err == sql.ErrNoRows {
-				// log.Printf("repository.transactions.findAllTransactions - deu ruim: %d\n", 1)
 				return []*entity.Transaction{}, nil
 			}
-			// log.Printf("repository.transactions.findAllTransactions - deu ruim: %d\n", 2)
 			return []*entity.Transaction{}, err
 		}
 
@@ -73,15 +71,15 @@ func (p *PostgresDatabase) findAllTransactions(ctx context.Context, page int, li
 		createdAt := dateTime.FormatNullDate(created)
 		updatedAt := dateTime.FormatNullDate(updated)
 		deletedAt := dateTime.FormatNullDate(deleted)
-		id, _ := utils.Parse(dateTime.FormatNullString(id))
-		clientId, _ := utils.Parse(dateTime.FormatNullString(client))
-		authorizationId, _ := utils.Parse(dateTime.FormatNullString(authorization))
+		id, _ := utils.Parse(strings.FormatNullString(id))
+		clientId, _ := utils.Parse(strings.FormatNullString(client))
+		authorizationId, _ := utils.Parse(strings.FormatNullString(authorization))
 		mounting = &entity.TransactionMount{
 			ID:              id.String(),
 			ClientID:        clientId.String(),
 			AuthorizationID: authorizationId.String(),
 			Value:           value,
-			Status:          dateTime.FormatNullString(status),
+			Status:          strings.FormatNullString(status),
 			DeniedAt:        deniedAt,
 			ApprovedAt:      approvedAt,
 			TrailDate:       &utils.TrailDate{},
@@ -92,17 +90,13 @@ func (p *PostgresDatabase) findAllTransactions(ctx context.Context, page int, li
 
 		transaction, err = entity.MountTransaction(mounting)
 		if err != nil {
-			// log.Printf("repository.transactions.findAllTransactions - deu ruim: %d\n", 3)
 			return []*entity.Transaction{}, err
 		}
 		transactions = append(transactions, transaction)
-		// log.Printf("repository.transactions.findAllTransactions - TRANSACTIONS tem %d registros\n",  len(transactions))
 	}
 	if err := rows.Err(); err != nil {
-		// log.Printf("repository.transactions.findAllTransactions - deu ruim: %d\n", 4)
 		return []*entity.Transaction{}, err
 	}
 
-	// log.Printf("repository.transactions.findAllTransactions - deu BBOOOOMMMM: TRANSACTIONS tem %d registros no TOTAL\n",  len(transactions))
 	return transactions, nil
 }

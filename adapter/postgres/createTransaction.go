@@ -40,9 +40,9 @@ func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Tra
 
 	query := `
 	INSERT INTO transactions
-		(id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at) 
+		(id, client_id, status, value, approved_at, denied_at, created_at, updated_at, deleted_at) 
 	VALUES
-		($1, $2, $3, $4, $5, $6, $7, $8)
+		($1, $2, $3, $4, $5, $6, $7, $8, $9)
 	`
 	stmt, err := p.DB.PrepareContext(ctx, query)
 	if err != nil {
@@ -52,6 +52,7 @@ func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Tra
 
 	_, err = stmt.ExecContext(ctx,
 		tr.GetID(),
+		tr.GetClientID(),
 		tr.GetStatus(),
 		tr.GetValue(),
 		approvedAt,

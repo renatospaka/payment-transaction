@@ -14,10 +14,11 @@ func (p *PostgresDatabase) denyTransaction(ctx context.Context, tr *entity.Trans
 	UPDATE transactions
 	SET status=$1,
 			approved_at=$2,
-			denied_at=$3
+			denied_at=$3,
 			updated_at=$4,
-			deleted_at=$5
-	WHERE id=$6
+			deleted_at=$5,
+			authorization_id=$6
+	WHERE id=$7
 	`
 	stmt, err := p.DB.PrepareContext(ctx, query)
 	if err != nil {
@@ -45,6 +46,7 @@ func (p *PostgresDatabase) denyTransaction(ctx context.Context, tr *entity.Trans
 												deniedAt, 
 												updatedAt, 
 												deletedAt, 
+												tr.GetAuthorizationID(),
 												tr.GetID())
 	if err != nil {
 		return err

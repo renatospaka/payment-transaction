@@ -80,12 +80,20 @@ func MountTransaction(mounting *TransactionMount) (*Transaction, error) {
 		return nil, err
 	}
 
+	status := mounting.Status
+	if status!= TR_APPROVED &&
+		status!= TR_DELETED &&
+		status!= TR_DENIED &&
+		status!= TR_PENDING {
+		status = TR_PENDING
+	}
+
 	transaction := &Transaction{
 		id:              uuid,
 		clientId:        uuidClient,
 		authorizationId: uuidCAuthorization,
 		value:           mounting.Value,
-		status:          mounting.Status,
+		status:          status,
 		deniedAt:        mounting.DeniedAt,
 		approvedAt:      mounting.ApprovedAt,
 		TrailDate:       &pkgEntity.TrailDate{},
