@@ -25,6 +25,17 @@ func (p *PostgresDatabase) Create(transaction *entity.Transaction) error {
 	return p.createTransaction(ctx, transaction)
 }
 
+// Add context to the methodo (in near future)
+func (p *PostgresDatabase) Find(id string) (*entity.Transaction, error) {
+	ctx := context.Background()
+	return p.findTransaction(ctx, id)
+}
+
+func (p *PostgresDatabase) FindAll(page, limit int) ([]*entity.Transaction, error) {
+	ctx := context.Background()
+	return p.findAllTransactions(ctx, page, limit)
+}
+
 func (p *PostgresDatabase) Approve(transaction *entity.Transaction) error {
 	ctx := context.Background()
 	return p.approveTransaction(ctx, transaction)
@@ -42,18 +53,7 @@ func (p *PostgresDatabase) Delete(id string) error {
 }
 
 // Add context to the methodo (in near future)
-func (p *PostgresDatabase) Update(transaction *entity.Transaction) error {
-	panic("implement me")
-	// return p.updateTransaction(transaction)
-}
-
-// Add context to the methodo (in near future)
-func (p *PostgresDatabase) Find(id string) (*entity.Transaction, error) {
+func (p *PostgresDatabase) Update(tr *entity.Transaction) error {
 	ctx := context.Background()
-	return p.findTransaction(ctx, id)
-}
-
-func (p *PostgresDatabase) FindAll(page, limit int, sort string) ([]*entity.Transaction, error) {
-	panic("implement me")
-	// return p.findAllTransactions(page, limit, sort)
+	return p.updateTransaction(ctx, tr)
 }

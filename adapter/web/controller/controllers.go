@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
 	"github.com/renatospaka/payment-transaction/core/dto"
@@ -68,38 +69,41 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 
-// Update basic information about a previously processed Transaction
+// Update the value of the Transaction
+// No validation need but transaction ID must exists
 func (c *TransactionController) Modify(w http.ResponseWriter, r *http.Request) {
-	// log.Println("http.transactions.modify")
+	log.Println("http.transactions.modify")
 
-	// id := chi.URLParam(r, "id")
-	// if id == "" {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	// var tr dto.TransactionUpdateDto
-	// err := json.NewDecoder(r.Body).Decode(&tr)
-	// if err != nil {
-	// 	json.NewEncoder(w).Encode("error: " + err.Error())
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	return
-	// }
+	var tr dto.TransactionUpdateDto
+	err := json.NewDecoder(r.Body).Decode(&tr)
+	if err != nil {
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	// err = c.usecases.Update(id, &tr)
-	// if err != nil {
-	// 	json.NewEncoder(w).Encode("error: " + err.Error())
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	return
-	// }
+	tr.ID = id
+	err = c.usecases.Update(&tr)
+	if err != nil {
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	// w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(&tr)
+	json.NewEncoder(w).Encode(&tr)
 }
 
 
 // Delete an existing Transaction
+// No validation need but transaction ID must exists
 func (c *TransactionController) Remove(w http.ResponseWriter, r *http.Request) {
 	log.Println("http.transactions.remove")
 
@@ -121,5 +125,31 @@ func (c *TransactionController) Remove(w http.ResponseWriter, r *http.Request) {
 
 // Return all existing Transactions (paginated) 
 func (c *TransactionController) GetAll(w http.ResponseWriter, r *http.Request) {
+	log.Println("http.transactions.getall")
+	
+	page, err :=  strconv.Atoi(r.URL.Query().Get("page"))
+	if err != nil {
+		page = 0
+	}
+	
+	limit, err :=  strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		limit = 0
+	}
+
+	log.Printf("http.transactions.getall - limit: %d, page: %d\n", limit, page)
+	var trs *dto.TransactionFindAllResponseDto
+	trs, err = c.usecases.FindAll(page, limit)
+	log.Printf("http.transactions.getall- TRS chegou: %v\n",  trs)
+	log.Printf("http.transactions.getall- TRS chegou com %d registros no TOTAL\n",  len(trs.Transactions))
+	if err != nil {
+		log.Printf("http.transactions.getall - deu ruim: %d\n", 1)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode("error: " + err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(&trs)
 }

@@ -218,12 +218,14 @@ func (t *Transaction) ApprovedAt() time.Time {
 // Change the transaction value and validate it before committing it
 func (t *Transaction) SetValue(value float32) (err error) {
 	current := t.value
+	
 	t.value = value
-
 	if err = t.Validate(); err != nil {
 		t.value = current
 		return err
 	}
+	t.SetAlterationToToday()
+	
 	return nil
 }
 
@@ -235,6 +237,7 @@ func (t *Transaction) GetValue() float32 {
 // Validates all business rules for this transaction
 func (t *Transaction) Validate() error {
 	t.valid = false
+	
 	if t.id.String() == "" {
 		return ErrIDIsRequired
 	}

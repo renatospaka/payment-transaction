@@ -4,29 +4,26 @@ import (
 	"context"
 	"log"
 
+	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/service"
 	"google.golang.org/grpc"
 )
 
 type GrpcClient struct {
-	ctx    context.Context
-	Client grpc.ClientConn
+	ctx      context.Context
+	conn     *grpc.ClientConn
+	services *service.AuthorizationService
+	client   pb.AuthorizationServiceClient
 }
 
-func NewGrpcClient(ctx context.Context) *GrpcClient {
+func NewGrpcClient(ctx context.Context, conn *grpc.ClientConn, services *service.AuthorizationService) *GrpcClient {
 	log.Println("estabelecendo conexão com o servidor gRPC")
-
 	cli := &GrpcClient{
-		ctx: ctx,
+		ctx:      ctx,
+		conn:     conn,
+		services: services,
 	}
+
+	cli.client = pb.NewAuthorizationServiceClient(cli.conn)
 	return cli
 }
-
-// func (g *GrpcClient) Connect(port string) {
-// 	options := make([]grpc.DialOption, 0)
-// 	g.Client, err := grpc.Dial(":" + port, options...)
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
-
-// 	srv, err := pb.AuthorizationServiceClient(g.Client)
-// }

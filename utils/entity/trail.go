@@ -43,10 +43,12 @@ func (t *TrailDate) SetAlterationToDate(date time.Time) {
 }
 
 func (t *TrailDate) SetDeletionToToday() {
+	t.updatedAt = getNow()
 	t.deletedAt = getNow()
 }
 
 func (t *TrailDate) SetDeletionToDate(date time.Time) {
+	t.updatedAt = date
 	t.deletedAt = date
 }
 

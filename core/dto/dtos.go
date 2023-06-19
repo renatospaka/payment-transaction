@@ -1,13 +1,9 @@
 package dto
 
-import (
-	"time"
-)
-
 type TransactionDto struct {
 	ID              string  `json:"transaction_id"`
 	ClientID        string  `json:"client_id"`
-	AuthorizationID string  `json:"cauthorization_id"`
+	AuthorizationID string  `json:"authorization_id"`
 	Status          string  `json:"status"`
 	Value           float32 `json:"value"`
 	DeniedAt        string  `json:"denied_at"`
@@ -28,13 +24,21 @@ type TransactionFindDto struct {
 }
 
 type TransactionUpdateDto struct {
-	DeniedAt   time.Time `json:"denied_at"`
-	ApprovedAt time.Time `json:"approved_at"`
-	ID         string    `json:"transaction_id"`
-	Status     string    `json:"status"`
-	Value      float32   `json:"value"`
+	ID    string  `json:"transaction_id"`
+	Value float32 `json:"value"`
 }
 
 type TransactionDeleteDto struct {
 	ID string `json:"transaction_id"`
+}
+
+type TransactionFindAllResponseDto struct {
+	Transactions []*TransactionDto
+}
+
+type TransactionAuthorizeDto struct {
+	ID              string  `json:"transaction_id"`
+	ClientID        string  `json:"client_id"`
+	AuthorizationId string  `json:"authorization_id"`
+	Value           float32 `json:"value"`
 }

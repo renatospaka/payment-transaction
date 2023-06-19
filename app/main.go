@@ -6,14 +6,15 @@ import (
 	"log"
 	"net/http"
 
-	// grpcClient "github.com/renatospaka/payment-transaction/adapter/grpc/client"
-	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+	"google.golang.org/grpc"
+
+	"github.com/renatospaka/payment-transaction/adapter/grpc/client"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/service"
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
 	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -34,23 +35,28 @@ func main() {
 	}
 	defer db.Close()
 
+	// client := grpcClient.NewGrpcClient(ctx)
+	log.Printf("iniciando conexão com o servidor gRPC na porta :%s\n", configs.GRPCServerPort)
+	options := make([]grpc.DialOption, 0)
+	options = append(options, grpc.WithInsecure())
+	connGrpc, err := grpc.Dial(":" + configs.GRPCServerPort, options...)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer connGrpc.Close()
+	
 	log.Println("iniciando gerador de transações")
+
+	//web server
 	repo := repository.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)
-
-	// client := grpcClient.NewGrpcClient(ctx)
-	log.Println("estabelecendo conexão com o servidor gRPC")
-	options := make([]grpc.DialOption, 0)
-	client, err := grpc.Dial(":" + configs.GRPCServerPort, options...)
-	if err != nil {
-		log.Panic(err)
-	}
-	defer client.Close()
-
-	srv := pb.NewAuthorizationServiceClient(client)
-
+	
+	//grpc client
+	services := service.NewAuthorizationService(usecases)
+	client.NewGrpcClient(ctx, connGrpc, services)
+	
 	//start web server
 	log.Printf("gerador de transações escutando porta: %s\n", configs.WEBServerPort)
 	http.ListenAndServe(":"+configs.WEBServerPort, webServer.Server)
