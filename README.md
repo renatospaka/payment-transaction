@@ -16,22 +16,29 @@
 - docker-compose up --build at the root of the app
 - in a PostgreSQL client, manually execute the script (copy, paste & run) ./migration/CREATE _TRANSACTION.sql
 - in a http client, execute the routes:
--- HEALTH
-curl --request GET \
-  --url http://localhost:3150/health
--- POST
-    curl --request POST \
-      --url http://localhost:3150/transactions \
-      --header 'Content-Type: application/json' \
-      --data '{
-      "client_id": "{uuid}",
-      "value": {float}
-    }'
--- GET
-curl --request GET \
+  -- HEALTH
+  curl --request GET \
+    --url http://localhost:3150/health
+  -- POST
+      curl --request POST \
+        --url http://localhost:3150/transactions \
+        --header 'Content-Type: application/json' \
+        --data '{
+        "client_id": "{uuid}",
+        "value": {float}
+      }'
+  -- GET
+  curl --request GET \
+    --url http://localhost:3150/transactions/{uuid} \
+    --header 'Content-Type: application/json'
+  -- DELETE
+  curl --request DELETE \
+    --url http://localhost:3150/transactions/{uuid} \
+    --header 'Content-Type: application/json'
+  -- UPDATE
+  curl --request PUT \
   --url http://localhost:3150/transactions/{uuid} \
-  --header 'Content-Type: application/json'
--- DELETE
-curl --request DELETE \
-  --url http://localhost:3150/transactions/{uuid} \
-  --header 'Content-Type: application/json'
+  --header 'Content-Type: application/json' \
+  --data '{
+    "value": {float}
+  }'

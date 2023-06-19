@@ -137,13 +137,9 @@ func (c *TransactionController) GetAll(w http.ResponseWriter, r *http.Request) {
 		limit = 0
 	}
 
-	log.Printf("http.transactions.getall - limit: %d, page: %d\n", limit, page)
-	var trs *dto.TransactionFindAllResponseDto
+	var trs dto.TransactionFindAllResponseDto
 	trs, err = c.usecases.FindAll(page, limit)
-	log.Printf("http.transactions.getall- TRS chegou: %v\n",  trs)
-	log.Printf("http.transactions.getall- TRS chegou com %d registros no TOTAL\n",  len(trs.Transactions))
 	if err != nil {
-		log.Printf("http.transactions.getall - deu ruim: %d\n", 1)
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode("error: " + err.Error())
 		return

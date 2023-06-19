@@ -9,23 +9,21 @@ import (
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
 )
 
-func (t *TransactionUsecase) findAllTransactions(ctx context.Context, page int, limit int) (*dto.TransactionFindAllResponseDto, error) {
+func (t *TransactionUsecase) findAllTransactions(ctx context.Context, page int, limit int) (dto.TransactionFindAllResponseDto, error) {
 	log.Println("usecase.transactions.findAll")
 
 	if page < 0 {
-		return &dto.TransactionFindAllResponseDto{}, errors.New("pagination cannot be negative")
+		return dto.TransactionFindAllResponseDto{}, errors.New("pagination cannot be negative")
 	} else if limit < 0 {
-		return &dto.TransactionFindAllResponseDto{}, errors.New("limitation cannot be negative")
+		return dto.TransactionFindAllResponseDto{}, errors.New("limitation cannot be negative")
 	}
 
 	transactions, err := t.repo.FindAll(page, limit)
 	if err != nil {
-		log.Printf("usecase.transactions.findAll - deu ruim: %d\n", 1)
-		return &dto.TransactionFindAllResponseDto{}, err
+		return dto.TransactionFindAllResponseDto{}, err
 	}
-	log.Printf("usecase.transactions.findAll - TRANSACTIONS chegou com %d registros no TOTAL\n", len(transactions))
 
-	var response *dto.TransactionFindAllResponseDto
+	var response dto.TransactionFindAllResponseDto
 	for _, tr := range transactions {
 		transaction := &dto.TransactionDto{
 			ID:              tr.GetID(),
@@ -41,6 +39,5 @@ func (t *TransactionUsecase) findAllTransactions(ctx context.Context, page int, 
 		}
 		response.Transactions = append(response.Transactions, transaction)
 	}
-	log.Printf("usecase.transactions.findAll - deu BBOOOOMMMM: RESPONSE tem %d registros no TOTAL\n", len(response.Transactions))
 	return response, nil
 }
