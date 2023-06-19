@@ -30,7 +30,7 @@ func (t *TransactionUsecase) Find(id string) (*dto.TransactionDto, error) {
 }
 
 // There is no business validations related to retrieving all transactions at the usecase level
-func (t *TransactionUsecase) FindAll(page int, limit int) (*dto.TransactionFindAllResponseDto, error) {
+func (t *TransactionUsecase) FindAll(page int, limit int) (dto.TransactionFindAllResponseDto, error) {
 	return t.findAllTransactions(context.Background(), page, limit)
 }
 
