@@ -8,6 +8,7 @@ import (
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
+	"github.com/renatospaka/payment-transaction/utils/strings"
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
@@ -63,8 +64,8 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	createdAt := dateTime.FormatNullDate(created)
 	updatedAt := dateTime.FormatNullDate(updated)
 	deletedAt := dateTime.FormatNullDate(deleted)
-	clientId, _ := utils.Parse(dateTime.FormatNullString(client))
-	authorizationId, _ := utils.Parse(dateTime.FormatNullString(authorization))
+	clientId, _ := utils.Parse(strings.FormatNullString(client))
+	authorizationId, _ := utils.Parse(strings.FormatNullString(authorization))
 
 	existing := &entity.TransactionMount{
 		ID:              tr.ID,
