@@ -46,7 +46,6 @@ func (t *TransactionUsecase) Update(tr *dto.TransactionUpdateDto) error {
 	return t.updateTransaction(context.Background(), tr)
 }
 
-
 // Request to the gRPC Server to process the authorization
 func (t *TransactionUsecase) Authorize(auth *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
 	return t.authorizeTransaction(context.Background(), auth)

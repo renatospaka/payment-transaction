@@ -10,5 +10,5 @@ var (
 	ErrInvalidAuthorizationID = errors.New("invalid authorization id")
 	ErrValueIsNegative        = errors.New("value must be positive")
 	ErrValueIsZero            = errors.New("value must be greater than zero")
-	ErrInvalidStatus          = errors.New("invalid statuso")
+	ErrInvalidStatus          = errors.New("invalid status")
 )

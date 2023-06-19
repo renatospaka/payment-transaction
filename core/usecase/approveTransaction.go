@@ -15,6 +15,7 @@ func (t *TransactionUsecase) approveTransaction(ctx context.Context, tr *dto.Tra
 	mounting := &entity.TransactionMount{
 		ID:              tr.ID,
 		ClientID:        tr.ClientID,
+		AuthorizationID: tr.AuthorizationId,
 		Value:           tr.Value,
 		TrailDate:       &pkgTrail.TrailDate{},
 	}
