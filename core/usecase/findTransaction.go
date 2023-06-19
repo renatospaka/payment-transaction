@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
@@ -10,6 +11,8 @@ import (
 )
 
 func (t *TransactionUsecase) findTransaction(ctx context.Context, id string) (*dto.TransactionDto, error) {
+	log.Println("usecase.transactions.find")
+	
 	if id == "" {
 		return nil, errors.New("id is required")
 	}

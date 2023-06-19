@@ -26,7 +26,6 @@ func (t *TransactionUsecase) Create(tr *dto.TransactionCreateDto) (*dto.Transact
 
 // All business validations related to finding transactions occur at the usecase level
 func (t *TransactionUsecase) Find(id string) (*dto.TransactionDto, error) {
-	log.Println("usecase.transactions.find")
 	return t.findTransaction(context.Background(), id)
 }
 
