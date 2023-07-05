@@ -1,41 +1,38 @@
 package service
 
-import (
-	"context"
+// import (
+// 	"context"
 
-	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
-	"github.com/renatospaka/payment-transaction/core/usecase"
-)
+// 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+// )
 
-type AuthorizationService struct {
-	usecases *usecase.TransactionUsecase
-}
+// type AuthorizationService struct {
+// }
 
-func NewAuthorizationService(usecases *usecase.TransactionUsecase) *AuthorizationService {
-	return &AuthorizationService{
-		usecases: usecases,
-	}
-}
+// func NewAuthorizationService() *AuthorizationService {
+// 	return &AuthorizationService{}
+// }
 
-func (a *AuthorizationService) Process(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
-	auth := &pb.AuthorizationRequest{
-		ClientId:      in.ClientId,
-		TransactionId: in.TransactionId,
-		Value:         in.Value,
-	}
+// func (a *AuthorizationService) Process(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
+// 	auth := &pb.AuthorizationRequest{
+// 		ClientId:      in.ClientId,
+// 		TransactionId: in.TransactionId,
+// 		Value:         in.Value,
+// 	}
 
-	response, err := a.usecases.Authorize(auth)
-	authResponse := &pb.AuthorizationResponse{
-		AuthorizationId: response.TransactionId,
-		ClientId:        response.ClientId,
-		TransactionId:   response.TransactionId,
-		Status:          response.Status,
-		Value:           response.Value,
-	}
+// 	// response, err := a.usecases.Authorize(auth)
+// 	response, err := interface{}, interface{}
+// 	authResponse := &pb.AuthorizationResponse{
+// 		AuthorizationId: response.TransactionId,
+// 		ClientId:        response.ClientId,
+// 		TransactionId:   response.TransactionId,
+// 		Status:          response.Status,
+// 		Value:           response.Value,
+// 	}
 
-	if err != nil {
-		authResponse.ErrorMessage = response.ErrorMessage
-		return authResponse, nil
-	}
-	return authResponse, nil
-}
+// 	if err != nil {
+// 		authResponse.ErrorMessage = response.ErrorMessage
+// 		return authResponse, nil
+// 	}
+// 	return authResponse, nil
+// }
