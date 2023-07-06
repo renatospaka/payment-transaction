@@ -10,7 +10,7 @@
 <a href="https://github.com/uber-go/guide">Uber style guide for golang</a>
 
 ## go have fun using Go -> 
-<a href="https://go.dev/solutions/#case-studies">Why Go</a>
+<a href="https://go.dev/solutions/#case-studies">Case Studies</a>
 
 ## Using the App
 - docker-compose up --build at the root of the app
