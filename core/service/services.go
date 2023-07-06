@@ -6,13 +6,9 @@ import (
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 )
 
-type AuthorizationService struct {}
-
-func NewAuthorizationService() *AuthorizationService {
-	return &AuthorizationService{}
+type TransactionService struct {	
+	pb.UnimplementedAuthorizationServiceServer
 }
-
-type TransactionService struct {}
 
 func NewTransactionService() *TransactionService {
 	return &TransactionService{}

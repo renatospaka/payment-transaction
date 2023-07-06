@@ -9,32 +9,19 @@ import (
 
 func (t *TransactionService) authorizeTransaction(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
 	log.Println("service.transactions.authorizeTransaction")
-	// auth := &pb.AuthorizationRequest{
-	// 	ClientId:      in.ClientId,
-	// 	TransactionId: in.TransactionId,
-	// 	Value:         in.Value,
-	// }
 
-	// response, err := t.usecases.Authorize(auth)
-	// authResponse := &pb.AuthorizationResponse{
-	// 	AuthorizationId: response.TransactionId,
-	// 	ClientId:        response.ClientId,
-	// 	TransactionId:   response.TransactionId,
-	// 	Status:          response.Status,
-	// 	Value:           response.Value,
-	// }
+	response, err := t.Process(ctx, in)
 	authResponse := &pb.AuthorizationResponse{
-		AuthorizationId: "",
-		ClientId:        "",
-		TransactionId:   "",
-		Status:          "",
-		Value:           0,
-		ErrorMessage:    "",
+		AuthorizationId: response.TransactionId,
+		ClientId:        response.ClientId,
+		TransactionId:   response.TransactionId,
+		Status:          response.Status,
+		Value:           response.Value,
 	}
 
-	// if err != nil {
-	// 	authResponse.ErrorMessage = response.ErrorMessage
-	// 	return authResponse, nil
-	// }
+	if err != nil {
+		authResponse.ErrorMessage = response.ErrorMessage
+		return authResponse, err
+	}
 	return authResponse, nil
 }

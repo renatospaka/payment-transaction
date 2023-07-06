@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	// "github.com/renatospaka/payment-transaction/adapter/grpc/client"
+	grpcClient "github.com/renatospaka/payment-transaction/adapter/grpc/client"
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
@@ -35,7 +35,7 @@ func main() {
 	}
 	defer db.Close()
 
-	// client := grpcClient.NewGrpcClient(ctx)
+	// grpc server
 	log.Printf("iniciando conexão com o servidor gRPC na porta :%s\n", configs.GRPCServerPort)
 	options := make([]grpc.DialOption, 0)
 	options = append(options, grpc.WithInsecure())
@@ -56,7 +56,7 @@ func main() {
 	//grpc services
 	services := service.NewTransactionService()
 	usecases.SetServices(services)
-	// // client.NewGrpcClient(ctx, connGrpc, services)
+	grpcClient.NewGrpcClient(ctx, connGrpc, services)
 	
 	//start web server
 	log.Printf("gerador de transações escutando porta: %s\n", configs.WEBServerPort)
