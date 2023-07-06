@@ -9,11 +9,11 @@ import (
 	"google.golang.org/grpc"
 
 	// "github.com/renatospaka/payment-transaction/adapter/grpc/client"
-	// "github.com/renatospaka/payment-transaction/adapter/grpc/service"
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
 	"github.com/renatospaka/payment-transaction/core/usecase"
+	"github.com/renatospaka/payment-transaction/core/service"
 	"github.com/renatospaka/payment-transaction/utils/configs"
 )
 
@@ -53,9 +53,9 @@ func main() {
 	controllers := controller.NewTransactionController(usecases)
 	webServer := httpServer.NewHttpServer(ctx, controllers)
 	
-	// //grpc client
-	// services := service.NewAuthorizationService()
-	// usecases.SetServices(services)
+	//grpc services
+	services := service.NewTransactionService()
+	usecases.SetServices(services)
 	// // client.NewGrpcClient(ctx, connGrpc, services)
 	
 	//start web server
