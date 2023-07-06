@@ -7,10 +7,15 @@ import (
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
+	"github.com/renatospaka/payment-transaction/core/service"
 )
 
 func (t *TransactionUsecase) createTransaction(ctx context.Context, tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
 	log.Println("usecase.transactions.create")
+
+	if t.services == nil {
+		return nil, service.ErrGRPCNotDefined
+	}
 
 	transaction, err := entity.NewTransaction(tr.ClientID, tr.Value)
 	if err != nil {

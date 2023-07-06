@@ -1,19 +1,19 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    container_name: transact_app
-    volumes:
-      - .:/go/src/
-    ports:
-      - 3150:8000
-    depends_on:
-      - db
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
-    networks:
-      - cred_system_network
+  # app:
+  #   build: .
+  #   container_name: transact_app
+  #   volumes:
+  #     - .:/go/src/
+  #   ports:
+  #     - 3150:8000
+  #   depends_on:
+  #     - db
+  #   extra_hosts:
+  #     - "host.docker.internal:172.17.0.1"
+  #   # networks:
+  #   #   - cred_system_network
 
   db:
     build: .docker/postgres
@@ -30,9 +30,9 @@ services:
       - POSTGRES_PASSWORD=thisislocal-noneedtoworry
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
-    networks:
-      - cred_system_network
+    # networks:
+    #   - cred_system_network
 
-networks:
-  cred_system_network:
-    driver: bridge
+# networks:
+#   cred_system_network:
+#     driver: bridge

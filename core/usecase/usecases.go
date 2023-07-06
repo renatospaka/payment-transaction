@@ -5,18 +5,26 @@ import (
 	"log"
 
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+	"github.com/renatospaka/payment-transaction/core/service"
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/repository"
 )
 
 type TransactionUsecase struct {
 	repo repository.TransactionInterface
+	services service.AuthorizationServiceInterface
 }
 
 func NewTransactionUsecase(repo repository.TransactionInterface) *TransactionUsecase {
 	return &TransactionUsecase{
 		repo: repo,
 	}
+}
+
+
+// Inject the gRPC service into the usecases
+func (t *TransactionUsecase) SetServices(services service.AuthorizationServiceInterface) {
+	t.services = services
 }
 
 // All business validations related to creating new transactions occur at the usecase level
