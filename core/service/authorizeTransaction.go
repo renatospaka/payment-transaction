@@ -10,7 +10,7 @@ import (
 func (t *TransactionService) authorizeTransaction(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
 	log.Println("service.transactions.authorizeTransaction")
 
-	response, err := t.Process(ctx, in)
+	response, err := t.grpServices.Client.Process(ctx, in)
 	authResponse := &pb.AuthorizationResponse{
 		AuthorizationId: response.TransactionId,
 		ClientId:        response.ClientId,

@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"log"
-	// "math/rand"
 
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 )
