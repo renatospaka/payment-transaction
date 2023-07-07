@@ -4,20 +4,19 @@ import (
 	"context"
 
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/client"
 )
 
-type AuthorizationService struct {}
-
-func NewAuthorizationService() *AuthorizationService {
-	return &AuthorizationService{}
+type TransactionService struct {	
+	// pb.UnimplementedAuthorizationServiceServer
+	grpServices *client.GrpcClient
 }
 
-type TransactionService struct {}
-
-func NewTransactionService() *TransactionService {
-	return &TransactionService{}
+func NewTransactionService(services *client.GrpcClient) *TransactionService {
+	return &TransactionService{
+		grpServices: services,
+	}
 }
-
 
 // Call the Process gRPC service requesting auhorization for this transaction
 func (t *TransactionService) AuthorizeTransaction(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {

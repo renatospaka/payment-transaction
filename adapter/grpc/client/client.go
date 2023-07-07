@@ -1,36 +1,26 @@
 package client
 
-// import (
-// 	"context"
-// 	// "log"
+import (
+	"context"
+	"log"
 
-// 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
-// 	"github.com/renatospaka/payment-transaction/adapter/grpc/service"
-// 	"google.golang.org/grpc"
-// )
+	"google.golang.org/grpc"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
+)
 
-// // type GrpcClient struct {
-// // 	ctx      context.Context
-// // 	conn     *grpc.ClientConn
-// // 	services *service.AuthorizationService
-// // 	client   pb.AuthorizationServiceClient
-// // }
+type GrpcClient struct {
+	ctx      context.Context
+	conn     *grpc.ClientConn
+	Client   pb.AuthorizationServiceClient
+}
 
-// // func NewGrpcClient(ctx context.Context, conn *grpc.ClientConn, services *service.AuthorizationService) *GrpcClient {
-// // 	log.Println("estabelecendo conexão com o servidor gRPC")
-// // 	cli := &GrpcClient{
-// // 		ctx:      ctx,
-// // 		conn:     conn,
-// // 		services: services,
-// // 	}
+func NewGrpcClient(ctx context.Context, conn *grpc.ClientConn) *GrpcClient {
+	log.Println("estabelecendo conexão com o servidor gRPC")
+	cli := &GrpcClient{
+		ctx:      ctx,
+		conn:     conn,
+	}
 
-// // 	cli.client = pb.NewAuthorizationServiceClient(cli.conn)
-// // 	return cli
-// // }
-
-// type GrpcClient struct {
-// 	ctx      context.Context
-// 	conn     *grpc.ClientConn
-// 	services *service.AuthorizationService
-// 	client   pb.AuthorizationServiceClient
-// }
+	cli.Client = pb.NewAuthorizationServiceClient(cli.conn)
+	return cli
+}
