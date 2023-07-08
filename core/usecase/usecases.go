@@ -27,8 +27,8 @@ func (t *TransactionUsecase) SetServices(services service.AuthorizationServiceIn
 	t.services = services
 }
 
-// All business validations related to creating new transactions occur at the usecase level
-func (t *TransactionUsecase) Create(tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
+// All business validations related to creating new transaction occur at the usecase level
+func (t *TransactionUsecase) CreateTransactionAndProcessAuthorization(tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
 	return t.createTransaction(context.Background(), tr)
 }
 
