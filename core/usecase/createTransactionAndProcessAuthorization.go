@@ -10,8 +10,8 @@ import (
 	"github.com/renatospaka/payment-transaction/core/service"
 )
 
-func (t *TransactionUsecase) createTransaction(ctx context.Context, tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
-	log.Println("usecase.transactions.create")
+func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx context.Context, tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
+	log.Println("usecase.transactions.createTransactionAndProcessAuthorization")
 
 	if t.services == nil {
 		return nil, service.ErrGRPCNotDefined
