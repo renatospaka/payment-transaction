@@ -25,17 +25,6 @@ type Transaction struct {
 	valid           bool
 }
 
-type TransactionMount struct {
-	ID              string
-	ClientID        string
-	AuthorizationID string
-	Value           float32
-	Status          string
-	DeniedAt        time.Time
-	ApprovedAt      time.Time
-	*pkgEntity.TrailDate
-}
-
 // Create a new transaction
 func NewTransaction(clientId string, value float32) (*Transaction, error) {
 	uuid, err := pkgEntity.Parse(clientId)
@@ -54,56 +43,6 @@ func NewTransaction(clientId string, value float32) (*Transaction, error) {
 		valid:      false,
 	}
 	transaction.TrailDate.SetCreationToToday()
-
-	// deliver the new transaction validated
-	err = transaction.Validate()
-	if err != nil {
-		return nil, err
-	}
-	return transaction, nil
-}
-
-// func MountTransaction(id string, client string, authorizationId string, status string, value float32, deniedAt time.Time, approvedAt time.Time, createdAt time.Time, updatedAt time.Time, deletedAt time.Time) (*Transaction, error) {
-func MountTransaction(mounting *TransactionMount) (*Transaction, error) {
-	uuid, err := pkgEntity.Parse(mounting.ID)
-	if err != nil {
-		return nil, err
-	}
-
-	uuidClient, err := pkgEntity.Parse(string(mounting.ClientID))
-	if err != nil {
-		return nil, err
-	}
-
-	uuidCAuthorization, err := pkgEntity.Parse(mounting.AuthorizationID)
-	if err != nil {
-		return nil, err
-	}
-
-	status := mounting.Status
-	if status!= TR_APPROVED &&
-		status!= TR_DELETED &&
-		status!= TR_DENIED &&
-		status!= TR_PENDING {
-		status = TR_PENDING
-	}
-
-	transaction := &Transaction{
-		id:              uuid,
-		clientId:        uuidClient,
-		authorizationId: uuidCAuthorization,
-		value:           mounting.Value,
-		status:          status,
-		deniedAt:        mounting.DeniedAt,
-		approvedAt:      mounting.ApprovedAt,
-		TrailDate:       &pkgEntity.TrailDate{},
-		valid:           false,
-	}
-	transaction.TrailDate.SetCreationToDate(mounting.CreatedAt())
-	transaction.TrailDate.SetAlterationToToday()
-	if !mounting.DeletedAt().IsZero() {
-		transaction.TrailDate.SetDeletionToDate(mounting.DeletedAt())
-	}
 
 	// deliver the new transaction validated
 	err = transaction.Validate()
@@ -247,15 +186,15 @@ func (t *Transaction) Validate() error {
 	t.valid = false
 	
 	if t.id.String() == "" {
-		return ErrIDIsRequired
+		return ErrTransactionIDIsRequired
 	}
 
 	if _, err := pkgEntity.Parse(t.id.String()); err != nil {
-		return ErrInvalidID
+		return ErrInvalidTransactionID
 	}
 
 	if t.clientId.String() == "" {
-		return ErrIDIsRequired
+		return ErrClientIDIsRequired
 	}
 
 	if _, err := pkgEntity.Parse(t.clientId.String()); err != nil {
@@ -271,9 +210,9 @@ func (t *Transaction) Validate() error {
 	}
 
 	if t.status != TR_APPROVED &&
-		t.status != TR_DELETED &&
-		t.status != TR_DENIED &&
-		t.status != TR_PENDING {
+	t.status != TR_DELETED &&
+	t.status != TR_DENIED &&
+	t.status != TR_PENDING {
 		return ErrInvalidStatus
 	}
 
@@ -284,4 +223,13 @@ func (t *Transaction) Validate() error {
 // Return whether the structure is valid or not
 func (t *Transaction) IsValid() bool {
 	return t.valid
+}
+
+
+// Validate if the current status of the transaction allows it to reprocess
+func (t *Transaction) CanReprocess() error {	
+	if t.status != TR_PENDING {
+		return ErrCannotReprocess
+	}
+	return nil
 }
