@@ -2,23 +2,23 @@ package usecase
 
 import (
 	"context"
-	"errors"
 	"log"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
+	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
 
-func (t *TransactionUsecase) findTransaction(ctx context.Context, id string) (*dto.TransactionDto, error) {
-	log.Println("usecase.transactions.find")
-	
+func (t *TransactionUsecase) findTransactionById(ctx context.Context, id string) (*dto.TransactionDto, error) {
+	log.Println("usecase.transactions.findTransactionById")
+
 	if id == "" {
-		return nil, errors.New("id is required")
+		return nil, entity.ErrTransactionIDIsRequired
 	}
 
 	if _, err := utils.Parse(id); err != nil {
-		return nil, errors.New("invalid id")
+		return nil, entity.ErrInvalidTransactionID
 	}
 
 	transaction, err := t.repo.Find(id)
@@ -26,7 +26,7 @@ func (t *TransactionUsecase) findTransaction(ctx context.Context, id string) (*d
 		return nil, err
 	}
 	if transaction == nil {
-		return nil, errors.New("transaction id not found")
+		return nil, entity.ErrTransactionIDNotFound
 	}
 
 	tr := &dto.TransactionDto{

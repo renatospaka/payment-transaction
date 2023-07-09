@@ -6,10 +6,11 @@ import (
 
 type TransactionInterface interface {
 	Create(*entity.Transaction) error
+	Reprocess(*entity.Transaction) error
 	Delete(string) error
 	Update(*entity.Transaction) error
 	Find(string) (*entity.Transaction, error)
-	FindAll(page, limit int) ([]*entity.Transaction, error)
+	FindAll(int, int) ([]*entity.Transaction, error)
 	Approve(*entity.Transaction) error
 	Deny(*entity.Transaction) error
 }
