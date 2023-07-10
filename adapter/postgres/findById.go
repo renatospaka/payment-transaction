@@ -8,15 +8,24 @@ import (
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
-	"github.com/renatospaka/payment-transaction/utils/strings"
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
+	"github.com/renatospaka/payment-transaction/utils/strings"
 )
 
-func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*entity.Transaction, error) {
-	log.Println("repository.transactions.findTransaction")
+func (p *PostgresDatabase) findById(ctx context.Context, id string) (*entity.Transaction, error) {
+	log.Println("repository.transactions.findById")
 
 	query := `
-	SELECT id, client_id, authorization_id, status, value , approved_at, denied_at, created_at, updated_at, deleted_at
+	SELECT 	id as transaction_id, 
+					client_id, 
+					authorization_id, 
+					status, 
+					value, 
+					approved_at, 
+					denied_at, 
+					created_at, 
+					updated_at, 
+					deleted_at
 	FROM transactions
 	WHERE id = $1`
 	stmt, err := p.DB.PrepareContext(ctx, query)
@@ -27,7 +36,7 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 
 	rows := stmt.QueryRow(id)
 	if err != nil {
-		return nil, err
+		return nil, entity.ErrTransactionIDNotFound
 	}
 
 	var (
@@ -54,7 +63,7 @@ func (p *PostgresDatabase) findTransaction(ctx context.Context, id string) (*ent
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil
+			return nil, entity.ErrTransactionIDNotFound
 		}
 		return nil, err
 	}

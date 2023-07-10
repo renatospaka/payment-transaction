@@ -32,7 +32,7 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	}
 
 	// Call the Authotization service and update status accordingly
-	auth := &pb.AuthorizationRequest{
+	auth := &pb.AuthorizationProcessRequest{
 		ClientId:      clientId,
 		TransactionId: id,
 		Value:         value,
@@ -51,8 +51,7 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	}
 	if authorize.Status == entity.TR_APPROVED {
 		err = t.approveTransaction(ctx, tran)
-	} else 
-	if authorize.Status == entity.TR_DENIED {
+	} else if authorize.Status == entity.TR_DENIED {
 		err = t.denyTransaction(ctx, tran)
 	}
 	if err != nil {
@@ -60,7 +59,7 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	}
 
 	// Find the new Transaction the reply to the caller
-	created, err := t.findTransaction(ctx, id)
+	created, err := t.findTransactionById(ctx, id)
 	if err != nil {
 		return nil, err
 	}
