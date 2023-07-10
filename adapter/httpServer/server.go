@@ -42,6 +42,7 @@ func (s *HttpServer) connect() {
 		// // r.Use(jwtauth.Authenticator)
 
 		r.Post("/", s.controllers.Process)
+		r.Post("/{transactioId}", s.controllers.ReprocessPending)
 		r.Get("/{id}", s.controllers.Get)
 		r.Get("/", s.controllers.GetAll)
 		r.Put("/{id}", s.controllers.Modify)

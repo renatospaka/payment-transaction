@@ -27,7 +27,12 @@ func (p *PostgresDatabase) Create(transaction *entity.Transaction) error {
 	return p.createTransaction(ctx, transaction)
 }
 
-// Add context to the methodo (in near future)
+// Persist a reprocessed transaction into the Postgres
+func (p *PostgresDatabase) Reprocess(transaction *entity.Transaction) error {
+	return p.reprocessTransaction(ctx, transaction)
+}
+
+// Find the transaction by its id
 func (p *PostgresDatabase) Find(id string) (*entity.Transaction, error) {
 	return p.findById(ctx, id)
 }
