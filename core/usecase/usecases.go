@@ -34,6 +34,11 @@ func (t *TransactionUsecase) CreateTransactionAndProcessAuthorization(tr *dto.Tr
 	return t.createTransactionAndProcessAuthorization(ctx, tr)
 }
 
+// Reprocess an existing transaction  pending authorization
+func (t *TransactionUsecase) ReprocessTransactionPendingAuthorization(tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
+	return t.reprocessTransactionPendingAuthorization(ctx, tr)
+}
+
 // Find an existing transaction by its id
 func (t *TransactionUsecase) FindTransactionById(id string) (*dto.TransactionDto, error) {
 	return t.findTransactionById(ctx, id)
