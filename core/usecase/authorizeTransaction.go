@@ -9,7 +9,6 @@ import (
 
 func (t *TransactionUsecase) authorizeTransaction(ctx context.Context, in *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error) {
 	log.Println("usecase.transactions.authorizeTransaction")
-	log.Printf("USECASE => in.TransactionId: %s | in.ClientId: %s | in.Value: %d\n", in.TransactionId, in.ClientId, in.Value)
 
 	// Execute the gRPC call
 	response := &pb.AuthorizationProcessResponse{}

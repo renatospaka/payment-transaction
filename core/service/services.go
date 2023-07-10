@@ -8,7 +8,6 @@ import (
 )
 
 type TransactionService struct {	
-	// pb.UnimplementedAuthorizationServiceServer
 	grpServices *client.GrpcClient
 }
 
