@@ -7,5 +7,5 @@ import (
 )
 
 type AuthorizationServiceInterface interface {
-	AuthorizeTransaction(context.Context, *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error)
+	AuthorizeTransaction(context.Context, *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error)
 }

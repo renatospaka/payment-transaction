@@ -19,6 +19,6 @@ func NewTransactionService(services *client.GrpcClient) *TransactionService {
 }
 
 // Call the Process gRPC service requesting auhorization for this transaction
-func (t *TransactionService) AuthorizeTransaction(ctx context.Context, in *pb.AuthorizationRequest) (*pb.AuthorizationResponse, error) {
+func (t *TransactionService) AuthorizeTransaction(ctx context.Context, in *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error) {
 	return t.authorizeTransaction(ctx, in)
 }
