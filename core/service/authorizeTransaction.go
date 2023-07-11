@@ -17,6 +17,7 @@ func (t *TransactionService) authorizeTransaction(ctx context.Context, in *pb.Au
 		TransactionId:   response.TransactionId,
 		Status:          response.Status,
 		Value:           response.Value,
+		ErrorMessage:    "",
 	}
 
 	if err != nil {

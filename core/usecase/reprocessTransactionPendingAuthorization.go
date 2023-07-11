@@ -36,7 +36,7 @@ func (t *TransactionUsecase) reprocessTransactionPendingAuthorization(ctx contex
 	tr.ID = id
 
 	// Call the Reprocess Authorization service and update status accordingly
-	auth := &pb.AuthorizationReprocessRequest{
+	auth := &pb.AuthorizationReprocessPendingRequest{
 		ClientId:      clientId,
 		TransactionId: id,
 		Value:         value,

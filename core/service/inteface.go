@@ -8,5 +8,5 @@ import (
 
 type AuthorizationServiceInterface interface {
 	AuthorizeTransaction(context.Context, *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error)
-	ReprocessTransactionPendingAuthorization(context.Context, *pb.AuthorizationReprocessRequest) (*pb.AuthorizationReprocessResponse, error)
+	ReprocessTransactionPendingAuthorization(context.Context, *pb.AuthorizationReprocessPendingRequest) (*pb.AuthorizationReprocessPendingResponse, error)
 }
