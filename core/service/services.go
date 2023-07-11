@@ -3,11 +3,11 @@ package service
 import (
 	"context"
 
-	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 	"github.com/renatospaka/payment-transaction/adapter/grpc/client"
+	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 )
 
-type TransactionService struct {	
+type TransactionService struct {
 	grpServices *client.GrpcClient
 }
 
@@ -23,6 +23,6 @@ func (t *TransactionService) AuthorizeTransaction(ctx context.Context, in *pb.Au
 }
 
 // Call the Process gRPC service requesting to reprocess the auhorization for this pending transaction
-func (t *TransactionService) ReprocessTransactionPendingAuthorization(ctx context.Context, in *pb.AuthorizationReprocessRequest) (*pb.AuthorizationReprocessResponse, error) {
+func (t *TransactionService) ReprocessTransactionPendingAuthorization(ctx context.Context, in *pb.AuthorizationReprocessPendingRequest) (*pb.AuthorizationReprocessPendingResponse, error) {
 	return t.reprocessTransactionPendingAuthorization(ctx, in)
 }
