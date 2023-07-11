@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"log"
-	"time"
 
 	"github.com/renatospaka/payment-transaction/core/entity"
 )
@@ -11,32 +10,11 @@ import (
 func (p *PostgresDatabase) createTransaction(ctx context.Context, tr *entity.Transaction) error {
 	log.Println("repository.transactions.createTransaction")
 
-	var approvedAt, deniedAt, createdAt, updatedAt, deletedAt interface{}
-
-	approvedAt = tr.ApprovedAt().Format(time.UnixDate)
-	if tr.ApprovedAt().IsZero() {
-		approvedAt = nil
-	}
-
-	deniedAt = tr.DeniedAt().Format(time.UnixDate)
-	if tr.DeniedAt().IsZero() {
-		deniedAt = nil
-	}
-
-	createdAt = tr.CreatedAt().Format(time.UnixDate)
-	if tr.CreatedAt().IsZero() {
-		createdAt = nil
-	}
-
-	updatedAt = tr.UpdatedAt().Format(time.UnixDate)
-	if tr.UpdatedAt().IsZero() {
-		updatedAt = nil
-	}
-
-	deletedAt = tr.DeletedAt().Format(time.UnixDate)
-	if tr.DeletedAt().IsZero() {
-		deletedAt = nil
-	}
+	approvedAt := formatDateToSQL(tr.ApprovedAt())
+	deniedAt := formatDateToSQL(tr.DeniedAt())
+	createdAt := formatDateToSQL(tr.CreatedAt())
+	updatedAt := formatDateToSQL(tr.UpdatedAt())
+	deletedAt := formatDateToSQL(tr.DeletedAt())
 
 	query := `
 	INSERT INTO transactions

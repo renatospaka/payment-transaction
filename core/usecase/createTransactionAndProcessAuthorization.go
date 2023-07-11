@@ -32,12 +32,12 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	}
 
 	// Call the Authotization service and update status accordingly
-	auth := &pb.AuthorizationProcessRequest{
+	auth := &pb.AuthorizationProcessNewRequest{
 		ClientId:      clientId,
 		TransactionId: id,
 		Value:         value,
 	}
-	authorize, err := t.authorizeTransaction(ctx, auth)
+	authorize, err := t.authorizeNewTransaction(ctx, auth)
 	if err != nil {
 		return nil, err
 	}
