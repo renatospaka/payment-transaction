@@ -75,7 +75,7 @@ func TestSetValue(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestSetStatusToApproved(t *testing.T) {
+func TestApproveTransaction(t *testing.T) {
 	tr, err := entity.NewTransaction(CLIENT_ID, 200.00)
 	assert.Nil(t, err)
 	assert.NotNil(t, tr)
@@ -84,7 +84,7 @@ func TestSetStatusToApproved(t *testing.T) {
 	assert.True(t, tr.DeniedAt().IsZero())
 	assert.True(t, tr.ApprovedAt().IsZero())
 
-	err = tr.SetStatusToApproved(AUTHORIZATION_ID)
+	err = tr.ApproveTransaction(AUTHORIZATION_ID)
 	assert.Nil(t, err)
 	assert.Equal(t, entity.TR_APPROVED, tr.GetStatus())
 	assert.Equal(t, AUTHORIZATION_ID, tr.GetAuthorizationID())
@@ -92,13 +92,13 @@ func TestSetStatusToApproved(t *testing.T) {
 	assert.False(t, tr.ApprovedAt().IsZero())
 
 	tr2, _ := entity.NewTransaction(CLIENT_ID, 200.00)
-	err = tr2.SetStatusToApproved("")
+	err = tr2.ApproveTransaction("")
 	assert.NotNil(t, err)
 	assert.Equal(t, entity.TR_PENDING, tr2.GetStatus())
 	assert.Equal(t, "", tr2.GetAuthorizationID())
 }
 
-func TestSetStatusToApprovedOnDate(t *testing.T) {
+func TestApproveTransactionOnDate(t *testing.T) {
 	tr, err := entity.NewTransaction(CLIENT_ID, 200.00)
 	assert.Nil(t, err)
 	assert.NotNil(t, tr)
@@ -108,7 +108,7 @@ func TestSetStatusToApprovedOnDate(t *testing.T) {
 	assert.True(t, tr.ApprovedAt().IsZero())
 
 	date := time.Now().Add(time.Hour * 24 * -10)
-	err = tr.SetStatusToApprovedOnDate(AUTHORIZATION_ID, date)
+	err = tr.ApproveTransactionOnDate(AUTHORIZATION_ID, date)
 	assert.Nil(t, err)
 	assert.Equal(t, entity.TR_APPROVED, tr.GetStatus())
 	assert.Equal(t, AUTHORIZATION_ID, tr.GetAuthorizationID())
@@ -117,13 +117,13 @@ func TestSetStatusToApprovedOnDate(t *testing.T) {
 	assert.Equal(t, date.Unix(), tr.ApprovedAt().Unix())
 
 	tr2, _ := entity.NewTransaction(CLIENT_ID, 200.00)
-	err = tr2.SetStatusToApprovedOnDate("", date)
+	err = tr2.ApproveTransactionOnDate("", date)
 	assert.NotNil(t, err)
 	assert.Equal(t, entity.TR_PENDING, tr2.GetStatus())
 	assert.Equal(t, "", tr2.GetAuthorizationID())
 }
 
-func TestSetStatusToDenied(t *testing.T) {
+func TestDenyTransaction(t *testing.T) {
 	tr, err := entity.NewTransaction(CLIENT_ID, 200.00)
 	assert.Nil(t, err)
 	assert.NotNil(t, tr)
@@ -132,7 +132,7 @@ func TestSetStatusToDenied(t *testing.T) {
 	assert.True(t, tr.DeniedAt().IsZero())
 	assert.True(t, tr.ApprovedAt().IsZero())
 
-	err = tr.SetStatusToDenied(AUTHORIZATION_ID)
+	err = tr.DenyTransaction(AUTHORIZATION_ID)
 	assert.Nil(t, err)
 	assert.Equal(t, entity.TR_DENIED, tr.GetStatus())
 	assert.Equal(t, AUTHORIZATION_ID, tr.GetAuthorizationID())
@@ -140,13 +140,13 @@ func TestSetStatusToDenied(t *testing.T) {
 	assert.True(t, tr.ApprovedAt().IsZero())
 
 	tr2, _ := entity.NewTransaction(CLIENT_ID, 200.00)
-	err = tr2.SetStatusToDenied("")
+	err = tr2.DenyTransaction("")
 	assert.NotNil(t, err)
 	assert.Equal(t, entity.TR_PENDING, tr2.GetStatus())
 	assert.Equal(t, "", tr2.GetAuthorizationID())
 }
 
-func TestSetStatusToDeniedOnDate(t *testing.T) {
+func TestDenyTransactionOnDate(t *testing.T) {
 	tr, err := entity.NewTransaction(CLIENT_ID, 200.00)
 	assert.Nil(t, err)
 	assert.NotNil(t, tr)
@@ -156,7 +156,7 @@ func TestSetStatusToDeniedOnDate(t *testing.T) {
 	assert.True(t, tr.ApprovedAt().IsZero())
 
 	date := time.Now().Add(time.Hour * 24 * -10)
-	err = tr.SetStatusToDeniedOnDate(AUTHORIZATION_ID, date)
+	err = tr.DenyTransactionOnDate(AUTHORIZATION_ID, date)
 	assert.Nil(t, err)
 	assert.Equal(t, entity.TR_DENIED, tr.GetStatus())
 	assert.Equal(t, AUTHORIZATION_ID, tr.GetAuthorizationID())
@@ -165,13 +165,13 @@ func TestSetStatusToDeniedOnDate(t *testing.T) {
 	assert.Equal(t, date.Unix(), tr.DeniedAt().Unix())
 
 	tr2, _ := entity.NewTransaction(CLIENT_ID, 200.00)
-	err = tr2.SetStatusToDeniedOnDate("", date)
+	err = tr2.DenyTransactionOnDate("", date)
 	assert.NotNil(t, err)
 	assert.Equal(t, entity.TR_PENDING, tr2.GetStatus())
 	assert.Equal(t, "", tr2.GetAuthorizationID())
 }
 
-func TestSetStatusToDeleted(t *testing.T) {
+func TestDeleteTransaction(t *testing.T) {
 	tr, err := entity.NewTransaction(CLIENT_ID, 200.00)
 	assert.Nil(t, err)
 	assert.NotNil(t, tr)
@@ -179,7 +179,7 @@ func TestSetStatusToDeleted(t *testing.T) {
 	assert.True(t, tr.DeniedAt().IsZero())
 	assert.True(t, tr.ApprovedAt().IsZero())
 
-	tr.SetStatusToDeleted()
+	tr.DeleteTransaction()
 	assert.Equal(t, entity.TR_DELETED, tr.GetStatus())
 	assert.True(t, tr.DeniedAt().IsZero())
 	assert.True(t, tr.ApprovedAt().IsZero())

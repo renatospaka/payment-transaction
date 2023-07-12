@@ -21,10 +21,10 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	if err != nil {
 		return nil, err
 	}
-	id := transaction.GetID()
+	transactionId := transaction.GetID()
 	clientId := transaction.GetClientID()
 	value := transaction.GetValue()
-	tr.ID = id
+	tr.ID = transactionId
 
 	err = t.repo.Create(transaction)
 	if err != nil {
@@ -33,8 +33,8 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 
 	// Call the Authotization service and update status accordingly
 	auth := &pb.AuthorizationProcessNewRequest{
+		TransactionId: transactionId,
 		ClientId:      clientId,
-		TransactionId: id,
 		Value:         value,
 	}
 	authorize, err := t.authorizeNewTransaction(ctx, auth)
@@ -44,9 +44,9 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 
 	// request the gRPC server to authorize the transaction
 	tran := &dto.TransactionAuthorizeDto{
-		ID:              id,
-		ClientID:        clientId,
+		ID:              transactionId,
 		AuthorizationId: authorize.AuthorizationId,
+		ClientID:        clientId,
 		Value:           value,
 	}
 	if authorize.Status == entity.TR_APPROVED {
@@ -59,7 +59,7 @@ func (t *TransactionUsecase) createTransactionAndProcessAuthorization(ctx contex
 	}
 
 	// Find the new Transaction the reply to the caller
-	created, err := t.findTransactionById(ctx, id)
+	created, err := t.findTransactionById(ctx, transactionId)
 	if err != nil {
 		return nil, err
 	}

@@ -80,7 +80,7 @@ func (t *Transaction) GetAuthorizationID() string {
 }
 
 // Change the status to approved and the approved day is today
-func (t *Transaction) SetStatusToApproved(authorization string) error {
+func (t *Transaction) ApproveTransaction(authorization string) error {
 	uuid, err := pkgEntity.Parse(authorization)
 	if err != nil {
 		return ErrInvalidAuthorizationID
@@ -95,7 +95,7 @@ func (t *Transaction) SetStatusToApproved(authorization string) error {
 }
 
 // Change the status to approved on a specific date
-func (t *Transaction) SetStatusToApprovedOnDate(authorization string, date time.Time) error {
+func (t *Transaction) ApproveTransactionOnDate(authorization string, date time.Time) error {
 	uuid, err := pkgEntity.Parse(authorization)
 	if err != nil {
 		return ErrInvalidAuthorizationID
@@ -110,7 +110,7 @@ func (t *Transaction) SetStatusToApprovedOnDate(authorization string, date time.
 }
 
 // Change the status to denied and the denied day is today
-func (t *Transaction) SetStatusToDenied(authorization string) error {
+func (t *Transaction) DenyTransaction(authorization string) error {
 	uuid, err := pkgEntity.Parse(authorization)
 	if err != nil {
 		return ErrInvalidAuthorizationID
@@ -125,7 +125,7 @@ func (t *Transaction) SetStatusToDenied(authorization string) error {
 }
 
 // Change the status to denied on a specific date
-func (t *Transaction) SetStatusToDeniedOnDate(authorization string, date time.Time) error {
+func (t *Transaction) DenyTransactionOnDate(authorization string, date time.Time) error {
 	uuid, err := pkgEntity.Parse(authorization)
 	if err != nil {
 		return ErrInvalidAuthorizationID
@@ -140,7 +140,7 @@ func (t *Transaction) SetStatusToDeniedOnDate(authorization string, date time.Ti
 }
 
 // Change the status to deleted and the deleted day is today
-func (t *Transaction) SetStatusToDeleted() {
+func (t *Transaction) DeleteTransaction() {
 	t.approvedAt = time.Time{}
 	t.deniedAt = time.Time{}
 	t.TrailDate.SetDeletionToToday()
@@ -165,14 +165,14 @@ func (t *Transaction) ApprovedAt() time.Time {
 // Change the transaction value and validate it before committing it
 func (t *Transaction) SetValue(value float32) (err error) {
 	current := t.value
-	
+
 	t.value = value
 	if err = t.Validate(); err != nil {
 		t.value = current
 		return err
 	}
 	t.SetAlterationToToday()
-	
+
 	return nil
 }
 
@@ -184,7 +184,7 @@ func (t *Transaction) GetValue() float32 {
 // Validates all business rules for this transaction
 func (t *Transaction) Validate() error {
 	t.valid = false
-	
+
 	if t.id.String() == "" {
 		return ErrTransactionIDIsRequired
 	}
@@ -210,9 +210,9 @@ func (t *Transaction) Validate() error {
 	}
 
 	if t.status != TR_APPROVED &&
-	t.status != TR_DELETED &&
-	t.status != TR_DENIED &&
-	t.status != TR_PENDING {
+		t.status != TR_DELETED &&
+		t.status != TR_DENIED &&
+		t.status != TR_PENDING {
 		return ErrInvalidStatus
 	}
 
@@ -225,9 +225,8 @@ func (t *Transaction) IsValid() bool {
 	return t.valid
 }
 
-
 // Validate if the current status of the transaction allows it to reprocess
-func (t *Transaction) CanReprocess() error {	
+func (t *Transaction) CanReprocess() error {
 	if t.status != TR_PENDING {
 		return ErrCannotReprocess
 	}
