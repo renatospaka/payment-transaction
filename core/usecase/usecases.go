@@ -61,6 +61,6 @@ func (t *TransactionUsecase) Update(tr *dto.TransactionUpdateDto) error {
 }
 
 // Request to the gRPC Server to process the authorization
-func (t *TransactionUsecase) Authorize(auth *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error) {
-	return t.authorizeTransaction(ctx, auth)
+func (t *TransactionUsecase) AuthorizeNewTransaction(auth *pb.AuthorizationProcessNewRequest) (*pb.AuthorizationProcessNewResponse, error) {
+	return t.authorizeNewTransaction(ctx, auth)
 }

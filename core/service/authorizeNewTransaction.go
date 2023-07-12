@@ -7,11 +7,11 @@ import (
 	"github.com/renatospaka/payment-transaction/adapter/grpc/pb"
 )
 
-func (t *TransactionService) authorizeTransaction(ctx context.Context, in *pb.AuthorizationProcessRequest) (*pb.AuthorizationProcessResponse, error) {
-	log.Println("service.transactions.authorizeTransaction")
+func (t *TransactionService) authorizeNewTransaction(ctx context.Context, in *pb.AuthorizationProcessNewRequest) (*pb.AuthorizationProcessNewResponse, error) {
+	log.Println("service.transactions.authorizeNewTransaction")
 
-	response, err := t.grpServices.Client.Process(ctx, in)
-	authResponse := &pb.AuthorizationProcessResponse{
+	response, err := t.grpServices.Client.ProcessNewAuthorization(ctx, in)
+	authResponse := &pb.AuthorizationProcessNewResponse{
 		AuthorizationId: response.TransactionId,
 		ClientId:        response.ClientId,
 		TransactionId:   response.TransactionId,

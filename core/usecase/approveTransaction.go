@@ -11,7 +11,7 @@ import (
 
 func (t *TransactionUsecase) approveTransaction(ctx context.Context, tr *dto.TransactionAuthorizeDto) error {
 	log.Println("usecase.transactions.approveTransaction")
-	
+
 	mounting := &entity.TransactionMount{
 		ID:              tr.ID,
 		ClientID:        tr.ClientID,
@@ -23,7 +23,10 @@ func (t *TransactionUsecase) approveTransaction(ctx context.Context, tr *dto.Tra
 	if err != nil {
 		return err
 	}
-	transaction.SetStatusToApproved(tr.AuthorizationId)
+	err = transaction.ApproveTransaction(tr.AuthorizationId)
+	if err != nil {
+		return err
+	}
 
 	return t.repo.Approve(transaction)
 }

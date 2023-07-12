@@ -23,7 +23,10 @@ func (t *TransactionUsecase) denyTransaction(tx context.Context, tr *dto.Transac
 	if err != nil {
 		return err
 	}
-	transaction.SetStatusToDenied(tr.AuthorizationId)
+	err = transaction.DenyTransaction(tr.AuthorizationId)
+	if err != nil {
+		return err
+	}
 
 	return t.repo.Deny(transaction)
 }
