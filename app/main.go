@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"net/http"
+	"time"
 
 	"google.golang.org/grpc"
 
@@ -11,6 +13,7 @@ import (
 	httpServer "github.com/renatospaka/payment-transaction/adapter/httpServer"
 	repository "github.com/renatospaka/payment-transaction/adapter/postgres"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
+
 	// "github.com/renatospaka/payment-transaction/core/service"
 	"github.com/renatospaka/payment-transaction/core/usecase"
 	"github.com/renatospaka/payment-transaction/utils/configs"
@@ -22,6 +25,10 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+
+	ctx := context.Background()
+	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Duration(configs.WEBServerTimeOut) * time.Millisecond))
+	defer cancel()
 
 	//open connection to the database
 	log.Println("iniciando conexão com o banco de dados")
@@ -48,8 +55,9 @@ func main() {
 	repo := repository.NewPostgresDatabase(db)
 	usecases := usecase.NewTransactionUsecase(repo)
 	controllers := controller.NewTransactionController(usecases)
-	webServer := httpServer.NewHttpServer(controllers)
+	webServer := httpServer.NewHttpServer(ctx, controllers)
 
+	// turned off to work around context timeout not working properly 
 	// //grpc services
 	// clientGrpc := client.NewGrpcClient(ctx, connGrpc)
 	// services := service.NewTransactionService(clientGrpc)

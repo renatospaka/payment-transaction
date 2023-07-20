@@ -1,14 +1,14 @@
 package controller
 
 import (
-	"context"
+	// "context"
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/go-chi/chi"
-	"github.com/renatospaka/payment-transaction/utils/configs"
+	// "github.com/renatospaka/payment-transaction/utils/configs"
 )
 
 // Return a specific Transaction
@@ -21,12 +21,12 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cng, _ := configs.LoadConfig("../../app/")
+	// cng, _ := configs.LoadConfig("../../app/")
 	ctx := r.Context()
-	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Duration(cng.WEBServerTimeOut) * time.Millisecond))
-	defer cancel()
+	// ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Duration(cng.WEBServerTimeOut) * time.Millisecond))
+	// defer cancel()
 
-	c.usecases.SetContext(ctx)
+	// c.usecases.SetContext(ctx)
 	time.Sleep(500 * time.Millisecond)
 
 	tr, err := c.usecases.FindTransactionById(id)

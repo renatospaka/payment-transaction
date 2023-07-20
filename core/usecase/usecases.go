@@ -11,7 +11,6 @@ import (
 )
 
 type TransactionUsecase struct {
-	ctx      context.Context
 	repo     repository.TransactionInterface
 	services service.AuthorizationServiceInterface
 }
@@ -30,10 +29,10 @@ func (t *TransactionUsecase) SetServices(services service.AuthorizationServiceIn
 	t.services = services
 }
 
-// Inject the context from the controller or service
-func (t *TransactionUsecase) SetContext(ctx context.Context) {
-	t.ctx = ctx
-}
+// // Inject the context from the controller or service
+// func (t *TransactionUsecase) SetContext(ctx context.Context) {
+// 	t.ctx = ctx
+// }
 
 // Create a new transaction and process its authorization
 func (t *TransactionUsecase) CreateTransactionAndProcessAuthorization(tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
@@ -47,7 +46,7 @@ func (t *TransactionUsecase) ReprocessTransactionPendingAuthorization(tr *dto.Tr
 
 // Find an existing transaction by its id
 func (t *TransactionUsecase) FindTransactionById(id string) (*dto.TransactionDto, error) {
-	return t.findTransactionById(t.ctx, id)
+	return t.findTransactionById(ctx, id)
 }
 
 // There is no business validations related to retrieving all transactions at the usecase level

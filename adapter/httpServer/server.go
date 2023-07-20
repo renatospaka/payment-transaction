@@ -1,9 +1,8 @@
 package httpServer
 
 import (
-	"encoding/json"
+	"context"
 	"log"
-	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -12,13 +11,15 @@ import (
 )
 
 type HttpServer struct {
+	ctx         context.Context
 	controllers *controller.TransactionController
 	Server      *chi.Mux
 }
 
-func NewHttpServer(controller *controller.TransactionController) *HttpServer {
+func NewHttpServer(ctx context.Context, controller *controller.TransactionController) *HttpServer {
 	log.Println("iniciando conexão com o servidor web")
 	httpServer := &HttpServer{
+		ctx:         ctx,
 		controllers: controller,
 	}
 	httpServer.connect()
@@ -31,6 +32,7 @@ func (s *HttpServer) connect() {
 	s.Server.Use(middleware.Logger)
 	s.Server.Use(middleware.Recoverer)
 	s.Server.Use(middlewares.Cors)
+	s.Server.Use(middleware.Heartbeat("/health"))
 	// s.Server.Use(middleware.WithValue("jwt", configs.TokenAuth))
 	// s.Server.Use(middleware.WithValue("JWTExpiresIn", configs.JWTExpiresIn))
 
@@ -44,12 +46,5 @@ func (s *HttpServer) connect() {
 		r.Get("/", s.controllers.GetAll)
 		r.Put("/{id}", s.controllers.Modify)
 		r.Delete("/{id}", s.controllers.Remove)
-	})
-
-	s.Server.Route("/health", func(r chi.Router) {
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode("Healthy")
-		})
 	})
 }
