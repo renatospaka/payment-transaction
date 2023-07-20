@@ -5,14 +5,16 @@ import (
 )
 
 type conf struct {
-	DBDriver       string `mapstructure:"DB_DRIVER"`
-	DBHost         string `mapstructure:"DB_HOST"`
-	DBPort         string `mapstructure:"DB_PORT"`
-	DBUser         string `mapstructure:"DB_USER"`
-	DBPassword     string `mapstructure:"DB_PASSWORD"`
-	DBName         string `mapstructure:"DB_NAME"`
-	WEBServerPort  string `mapstructure:"WEB_SERVER_PORT"`
-	GRPCServerPort string `mapstructure:"GRPC_SERVER_PORT"`
+	DBDriver          string `mapstructure:"DB_DRIVER"`
+	DBHost            string `mapstructure:"DB_HOST"`
+	DBPort            string `mapstructure:"DB_PORT"`
+	DBUser            string `mapstructure:"DB_USER"`
+	DBPassword        string `mapstructure:"DB_PASSWORD"`
+	DBName            string `mapstructure:"DB_NAME"`
+	WEBServerPort     string `mapstructure:"WEB_SERVER_PORT"`
+	WEBServerTimeOut  int64 `mapstructure:"GRPC_SERVER_TIMEOUT"`
+	GRPCServerPort    string `mapstructure:"GRPC_SERVER_PORT"`
+	GRPCServerTimeOut int64 `mapstructure:"GRPC_SERVER_TIMEOUT"`
 	// JWTSecret      string `mapstructure:"JWT_SECRET"`
 	// JWTExpiresIn   int    `mapstructure:"JWT_EXPIRES_IN"`
 	// TokenAuth      *jwtauth.JWTAuth
