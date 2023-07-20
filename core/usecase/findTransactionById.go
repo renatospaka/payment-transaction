@@ -3,9 +3,11 @@ package usecase
 import (
 	"context"
 	"log"
+	"time"
 
 	"github.com/renatospaka/payment-transaction/core/dto"
 	"github.com/renatospaka/payment-transaction/core/entity"
+	"github.com/renatospaka/payment-transaction/utils/configs"
 	"github.com/renatospaka/payment-transaction/utils/dateTime"
 	utils "github.com/renatospaka/payment-transaction/utils/entity"
 )
@@ -13,6 +15,11 @@ import (
 func (t *TransactionUsecase) findTransactionById(ctx context.Context, id string) (*dto.TransactionDto, error) {
 	log.Println("usecase.transactions.findTransactionById")
 
+	cng, _ := configs.LoadConfig("../../app/")
+	ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Duration(cng.WEBServerTimeOut) * time.Millisecond))
+	defer cancel()
+
+	log.Println("usecase.transactions.findTransactionById - GOT HERE")
 	if id == "" {
 		return nil, entity.ErrTransactionIDIsRequired
 	}

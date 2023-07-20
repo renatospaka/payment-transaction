@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi"
 )
@@ -18,6 +19,10 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	ctx := r.Context()
+	c.usecases.SetContext(ctx)
+	time.Sleep(500 * time.Millisecond)
+
 	tr, err := c.usecases.FindTransactionById(id)
 	if tr == nil || err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -28,4 +33,9 @@ func (c *TransactionController) Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&tr)
+
+	select {
+	case <-ctx.Done():
+		w.WriteHeader(http.StatusRequestTimeout)
+	}
 }
