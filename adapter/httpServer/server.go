@@ -2,12 +2,8 @@ package httpServer
 
 import (
 	"context"
-	"encoding/json"
 	"log"
-	"net/http"
-	"time"
 
-	"google.golang.org/grpc/codes"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/renatospaka/payment-transaction/adapter/web/controller"
@@ -36,6 +32,7 @@ func (s *HttpServer) connect() {
 	s.Server.Use(middleware.Logger)
 	s.Server.Use(middleware.Recoverer)
 	s.Server.Use(middlewares.Cors)
+	s.Server.Use(middleware.Heartbeat("/health"))
 	// s.Server.Use(middleware.WithValue("jwt", configs.TokenAuth))
 	// s.Server.Use(middleware.WithValue("JWTExpiresIn", configs.JWTExpiresIn))
 
@@ -43,23 +40,11 @@ func (s *HttpServer) connect() {
 		// // r.Use(jwtauth.Verifier(configs.TokenAuth))
 		// // r.Use(jwtauth.Authenticator)
 
-		time.Sleep(400 * time.Millisecond)
-		if 	s.ctx.Err() == context.Canceled {
-			log.Fatalf("error processing the RPC call: %v\n", codes.Canceled)
-		}
-
 		r.Post("/", s.controllers.Process)
 		r.Post("/{transactioId}", s.controllers.ReprocessPending)
 		r.Get("/{id}", s.controllers.Get)
 		r.Get("/", s.controllers.GetAll)
 		r.Put("/{id}", s.controllers.Modify)
 		r.Delete("/{id}", s.controllers.Remove)
-	})
-
-	s.Server.Route("/health", func(r chi.Router) {
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusOK)
-			_ = json.NewEncoder(w).Encode("Healthy")
-		})
 	})
 }

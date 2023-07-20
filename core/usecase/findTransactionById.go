@@ -13,6 +13,8 @@ import (
 func (t *TransactionUsecase) findTransactionById(ctx context.Context, id string) (*dto.TransactionDto, error) {
 	log.Println("usecase.transactions.findTransactionById")
 
+
+	log.Println("usecase.transactions.findTransactionById - GOT HERE")
 	if id == "" {
 		return nil, entity.ErrTransactionIDIsRequired
 	}

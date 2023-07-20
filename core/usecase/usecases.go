@@ -18,7 +18,7 @@ type TransactionUsecase struct {
 var ctx context.Context
 
 func NewTransactionUsecase(repo repository.TransactionInterface) *TransactionUsecase {
-	ctx = context.Background()
+	log.Println("iniciando os casos de uso")
 	return &TransactionUsecase{
 		repo: repo,
 	}
@@ -28,6 +28,11 @@ func NewTransactionUsecase(repo repository.TransactionInterface) *TransactionUse
 func (t *TransactionUsecase) SetServices(services service.AuthorizationServiceInterface) {
 	t.services = services
 }
+
+// // Inject the context from the controller or service
+// func (t *TransactionUsecase) SetContext(ctx context.Context) {
+// 	t.ctx = ctx
+// }
 
 // Create a new transaction and process its authorization
 func (t *TransactionUsecase) CreateTransactionAndProcessAuthorization(tr *dto.TransactionCreateDto) (*dto.TransactionDto, error) {
