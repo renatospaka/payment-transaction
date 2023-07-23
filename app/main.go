@@ -80,7 +80,7 @@ func main() {
 	go func(){
 		<- sign
 
-		shutdownCtx, _ := context.WithTimeout(serverCtx, 750 * time.Millisecond)
+		shutdownCtx, _ := context.WithTimeout(serverCtx, 500 * time.Millisecond)
 		go func(){
 			<- shutdownCtx.Done()
 			if shutdownCtx.Err() == context.DeadlineExceeded {
