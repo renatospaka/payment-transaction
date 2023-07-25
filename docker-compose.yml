@@ -3,7 +3,7 @@ version: "3.8"
 services:
   # app:
   #   build: .
-  #   container_name: transact_app
+  #   container_name: transactions_app
   #   volumes:
   #     - .:/go/src/
   #   ports:
@@ -33,6 +33,29 @@ services:
     # networks:
     #   - cred_system_network
 
+  db-oracle:
+    build: .docker/oracle
+    container_name: transact_oracle_db
+    environment:
+      # - ORACLE_SID=ORCLCDB
+      # - ORACLE_PDB=ORCLPDB1
+      - ORACLE_PWD=ThisIsLocal101NoNeed2Worry
+    ports:
+      - 3152:1521
+      - 3153:5500
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - oracle-backup:/opt/oracle/backup
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/ThisIsLocal101NoNeed2Worry@XE as sysdba", "@healthcheck.sql"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
 # networks:
 #   cred_system_network:
 #     driver: bridge
+
+volumes:
+  oracle-data:
+  oracle-backup:

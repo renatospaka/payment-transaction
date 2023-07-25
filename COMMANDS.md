@@ -24,3 +24,6 @@
 
 ## folder structure
 - tree -tr -L 2
+
+## to pull the docker image from Oracle Container Registry
+- docker login container-registry.oracle.com
