@@ -29,7 +29,6 @@ services:
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
 
-
 networks:
   cred_system_network:
     driver: bridge

@@ -6,7 +6,6 @@ bin/
 # Referenciam-se ao ambiente de desenvolvimento
 **/.docker/postgres/**dbdata*
 
-
 # Log files
 *.log
 
