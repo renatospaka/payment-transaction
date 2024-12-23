@@ -1,10 +1,10 @@
 module github.com/renatospaka/payment-transaction
 
-go 1.20
+go 1.23.3
 
 require (
 	github.com/go-chi/chi v1.5.4
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	// github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
